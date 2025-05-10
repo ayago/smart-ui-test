@@ -1,0 +1,17 @@
+Host: https://www.google.com
+
+Features:
+ - DUMMY_FEATURE:
+    enable: false
+    on:
+       province: N/A
+       store: N/A
+
+Page 1
+expected:
+ - Search: ""
+given:
+ - Search: chatgpt
+action:
+ type: Enter
+ name: Search
