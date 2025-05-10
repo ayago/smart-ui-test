@@ -2,6 +2,8 @@
 
 This project is a lean Spring Boot application designed to automate UI workflows testing based on structured input defined in a simple text file. It supports dynamic form filling, feature flag activation, and field verification using a flexible parsing and execution engine built on Selenium WebDriver.
 
+**This is a Work In-Progress.**
+
 ## Features
 
 * 🧠 Smart locator engine: Automatically finds input fields using labels, placeholders, name, id, or title attributes.
