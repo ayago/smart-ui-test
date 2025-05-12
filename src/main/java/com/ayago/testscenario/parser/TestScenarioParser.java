@@ -22,6 +22,7 @@ public class TestScenarioParser {
     // Use descriptive names for constants
     private static final String HOST_PREFIX = "Host:";
     private static final String FEATURES_KEYWORD = "Features:";
+    private static final String FEATURES_PREFIX = "Features";
     private static final String PAGE_PREFIX = "Page";
     private static final String ACTION_PREFIX = "action:";
     private static final String ENABLE_PREFIX = "enable:";
@@ -45,25 +46,28 @@ public class TestScenarioParser {
         String host = null;
         Map<String, Feature> features = new HashMap<>();
         List<Page> pages = new ArrayList<>();
-        String line;
+        String line = "";
         int lineNumber = 0;
         boolean pageWasLastLine = false;
+        boolean featuresWasLine = false;
         
         try {
-            while ((line = reader.readLine()) != null) {
+            while (featuresWasLine || (line = reader.readLine()) != null) {
                 lineNumber++;
                 line = line.trim();
                 
                 if (line.startsWith(HOST_PREFIX)) {
                     host = parseHost(line, lineNumber);
-                } else if (line.equals(FEATURES_KEYWORD)) {
+                } else if (featuresWasLine || line.equals(FEATURES_KEYWORD)) {
                     Tuple<Map<String, Feature>> featuresResult = parseFeatures(reader, lineNumber);
                     features = featuresResult.object();
                     pageWasLastLine = lastScannedLineStartsWithPage(featuresResult.lastLine());
+                    featuresWasLine = lastScannedLineStartsWithFeatures(featuresResult.lastLine());
                 } else if (pageWasLastLine || line.startsWith(PAGE_PREFIX)) {
                     Tuple<Page> pageResult = parsePage(line, reader, lineNumber);
                     pages.add(pageResult.object());
                     pageWasLastLine = lastScannedLineStartsWithPage(pageResult.lastLine());
+                    featuresWasLine = lastScannedLineStartsWithFeatures(pageResult.lastLine());
                 } else if (!line.isEmpty() && !line.startsWith(COMMENT_PREFIX)) {
                     throw new IOException("Invalid line format on line " + lineNumber + ": " + line);
                 }
@@ -78,6 +82,10 @@ public class TestScenarioParser {
             throw new IOException("Missing 'Host' definition in test scenario.");
         }
         return new TestScenario(host, features, pages);
+    }
+    
+    private boolean lastScannedLineStartsWithFeatures(String lastLine){
+        return StringUtils.hasLength(lastLine) && lastLine.trim().startsWith(FEATURES_PREFIX);
     }
     
     private boolean lastScannedLineStartsWithPage(String lastLine) {
@@ -163,9 +171,10 @@ public class TestScenarioParser {
         String type = null;
         Map<String, String> data = new HashMap<>();
         String subLine;
-        
+        String lastLineFromSubParsing = null;
         // Read until the end of the action block, or the next Page definition
-        while ((subLine = reader.readLine()) != null && !subLine.trim().startsWith(PAGE_PREFIX)) {
+        while ((subLine = reader.readLine()) != null && !subLine.trim().startsWith(PAGE_PREFIX) &&
+            !subLine.trim().startsWith(FEATURES_PREFIX)) {
             subLine = subLine.trim();
             String trimmedValue = subLine.substring(subLine.indexOf(":") + 1).trim();
             if (subLine.startsWith("type:")) {
@@ -181,6 +190,8 @@ public class TestScenarioParser {
                 Map<String, String> newFields = parseFields(reader, lineNumber);
                 data.putAll(newFields);
             }
+            
+            lastLineFromSubParsing = subLine;
         }
         
         if (type == null) {

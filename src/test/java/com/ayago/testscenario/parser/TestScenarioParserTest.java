@@ -189,4 +189,81 @@ public class TestScenarioParserTest {
         assertThrows(IOException.class, () -> parser.parse(createReader(testData)));
     }
     
+    @Test
+    void parse_noBlankLines_parsesCorrectly() throws IOException {
+        String testData = "Host: https://www.example.com\n" +
+            "Page 1\n" +
+            "expected:\n" +
+            " - Element1: \"Value1\"\n" +
+            "action:\n" +
+            " type: Enter\n" +
+            " target-field: Field1\n" +
+            " value: Value1";
+        
+        when(actionFactory.getAction(eq(ActionType.Enter), anyMap()))
+            .thenReturn(new EnterAction("Field1", "Value1"));
+        
+        TestScenario scenario = parser.parse(createReader(testData));
+        
+        assertNotNull(scenario);
+        assertEquals("https://www.example.com", scenario.getHost());
+        assertThat(scenario.getPages(), hasSize(1));
+    }
+    
+    @Test
+    void parse_featuresAtEnd_parsesCorrectly() throws IOException {
+        String testData = "Host: https://www.example.com\n" +
+            "Page 1\n" +
+            "expected:\n" +
+            " - Element1: \"Value1\"\n" +
+            "action:\n" +
+            " type: Enter\n" +
+            " target-field: Field1\n" +
+            " value: Value1\n" +
+            "Features:\n" +
+            " - DUMMY_FEATURE:\n" +
+            "  enable: false\n" +
+            "  on:\n" +
+            "   province: N/A\n" +
+            "   store: N/A";
+        
+        when(actionFactory.getAction(eq(ActionType.Enter), anyMap()))
+            .thenReturn(new EnterAction("Field1", "Value1"));
+        
+        TestScenario scenario = parser.parse(createReader(testData));
+        
+        assertNotNull(scenario);
+        assertEquals("https://www.example.com", scenario.getHost());
+        assertThat(scenario.getFeatures().values(), hasSize(1));
+        assertThat(scenario.getPages(), hasSize(1));
+    }
+    
+    @Test
+    void parse_featuresAfterHost_parsesCorrectly() throws IOException {
+        String testData = "Host: https://www.example.com\n" +
+            "Features:\n" +
+            " - DUMMY_FEATURE:\n" +
+            "  enable: false\n" +
+            "  on:\n" +
+            "   province: N/A\n" +
+            "   store: N/A\n" +
+            "Page 1\n" +
+            "expected:\n" +
+            " - Element1: \"Value1\"\n" +
+            "action:\n" +
+            " type: Enter\n" +
+            " target-field: Field1\n" +
+            " value: Value1";
+        
+        when(actionFactory.getAction(eq(ActionType.Enter), anyMap()))
+            .thenReturn(new EnterAction("Field1", "Value1"));
+        
+        TestScenario scenario = parser.parse(createReader(testData));
+        
+        assertNotNull(scenario);
+        assertEquals("https://www.example.com", scenario.getHost());
+        assertThat(scenario.getFeatures().values(), hasSize(1));
+        assertThat(scenario.getPages(), hasSize(1));
+    }
+    
 }
