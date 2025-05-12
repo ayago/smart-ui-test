@@ -5,23 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d1b51daa-cbf5-472c-9bf5-c61a15d66d3e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/ayago/testscenario/Action.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/ayago/testscenario/ClickAction.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/ayago/testscenario/EnterAction.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/ayago/testscenario/SubmitAction.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/ayago/testscenario/TestScenario.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/ayago/testscenario/parser/ActionFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/ayago/testscenario/parser/ActionFactoryStrategy.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/ayago/testscenario/parser/ActionType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/ayago/testscenario/parser/ClickActionFactoryStrategy.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/ayago/testscenario/parser/EnterActionFactoryStrategy.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/ayago/testscenario/parser/SubmitActionFactoryStrategy.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/ayago/testscenario/parser/TestScenarioParser.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/ayago/testscenario/parser/TestScenarioParserTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/SmartUIRunnerImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/SmartUIRunnerImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/pageflow/TestScenario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/pageflow/TestScenario.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/testscenario/parser/TestScenarioParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/testscenario/parser/TestScenarioParser.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -184,61 +168,6 @@
           <url>file://$PROJECT_DIR$/src/main/java/com/ayago/SmartUIRunnerImpl.java</url>
           <line>37</line>
           <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/ayago/testscenario/parser/TestScenarioParser.java</url>
-          <line>94</line>
-          <option name="timeStamp" value="23" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/ayago/testscenario/parser/TestScenarioParser.java</url>
-          <line>109</line>
-          <option name="timeStamp" value="24" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/ayago/testscenario/parser/TestScenarioParser.java</url>
-          <line>141</line>
-          <option name="timeStamp" value="28" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/ayago/testscenario/parser/TestScenarioParser.java</url>
-          <line>143</line>
-          <option name="timeStamp" value="29" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/ayago/testscenario/parser/TestScenarioParser.java</url>
-          <line>149</line>
-          <option name="timeStamp" value="30" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/ayago/testscenario/parser/TestScenarioParser.java</url>
-          <line>65</line>
-          <option name="timeStamp" value="36" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/ayago/testscenario/parser/TestScenarioParser.java</url>
-          <line>66</line>
-          <option name="timeStamp" value="37" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/ayago/testscenario/parser/TestScenarioParser.java</url>
-          <line>67</line>
-          <option name="timeStamp" value="38" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/ayago/testscenario/parser/TestScenarioParser.java</url>
-          <line>54</line>
-          <option name="timeStamp" value="40" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/ayago/testscenario/parser/TestScenarioParser.java</url>
-          <line>60</line>
-          <option name="timeStamp" value="41" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/ayago/testscenario/parser/TestScenarioParser.java</url>
-          <line>103</line>
-          <option name="timeStamp" value="45" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
