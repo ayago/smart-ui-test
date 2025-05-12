@@ -2,6 +2,7 @@ package com.ayago.testscenario.parser;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
@@ -31,6 +32,8 @@ public class TestScenarioParser {
     private static final String QUOTE = "\"";
     private static final String COMMENT_PREFIX = "//";
     private static final String FIELDS_PREFIX = "fields:"; // Added for consistency
+    private static final String EXPECTED_PREFIX = "expected:";
+    private static final String ON_PREFIX = "on:";
     
     // Use a record for internal data transfer
     private record Tuple<T>(String lastLine, T object) {
@@ -46,30 +49,41 @@ public class TestScenarioParser {
         String host = null;
         Map<String, Feature> features = new HashMap<>();
         List<Page> pages = new ArrayList<>();
-        String line = "";
+        String line = reader.readLine();
         int lineNumber = 0;
         boolean pageWasLastLine = false;
         boolean featuresWasLine = false;
         
         try {
-            while (featuresWasLine || (line = reader.readLine()) != null) {
+            while (line != null) {
                 lineNumber++;
                 line = line.trim();
+                String lastLineThisPass = null;
                 
                 if (line.startsWith(HOST_PREFIX)) {
                     host = parseHost(line, lineNumber);
+                    pageWasLastLine = false;
+                    featuresWasLine = false;
                 } else if (featuresWasLine || line.equals(FEATURES_KEYWORD)) {
                     Tuple<Map<String, Feature>> featuresResult = parseFeatures(reader, lineNumber);
                     features = featuresResult.object();
-                    pageWasLastLine = lastScannedLineStartsWithPage(featuresResult.lastLine());
-                    featuresWasLine = lastScannedLineStartsWithFeatures(featuresResult.lastLine());
+                    lastLineThisPass = featuresResult.lastLine();
+                    pageWasLastLine = lastScannedLineStartsWithPage(lastLineThisPass);
+                    featuresWasLine = lastScannedLineStartsWithFeatures(lastLineThisPass);
                 } else if (pageWasLastLine || line.startsWith(PAGE_PREFIX)) {
                     Tuple<Page> pageResult = parsePage(line, reader, lineNumber);
                     pages.add(pageResult.object());
-                    pageWasLastLine = lastScannedLineStartsWithPage(pageResult.lastLine());
-                    featuresWasLine = lastScannedLineStartsWithFeatures(pageResult.lastLine());
+                    lastLineThisPass = pageResult.lastLine();
+                    pageWasLastLine = lastScannedLineStartsWithPage(lastLineThisPass);
+                    featuresWasLine = lastScannedLineStartsWithFeatures(lastLineThisPass);
                 } else if (!line.isEmpty() && !line.startsWith(COMMENT_PREFIX)) {
                     throw new IOException("Invalid line format on line " + lineNumber + ": " + line);
+                }
+                
+                if(pageWasLastLine || featuresWasLine){
+                    line = lastLineThisPass;
+                } else {
+                    line = reader.readLine();
                 }
                 // handle empty lines and comments
             }
@@ -109,7 +123,7 @@ public class TestScenarioParser {
             features.put(feature.getName(), feature);
             lastLineFromSubParsing = featureResult.lastLine();
         }
-        return new Tuple<>(lastLineFromSubParsing, features);
+        return new Tuple<>(line, features);
     }
     
     private Tuple<Feature> parseFeature(String line, BufferedReader reader, int lineNumber) throws IOException {
@@ -124,7 +138,8 @@ public class TestScenarioParser {
         Map<String, String> on = new HashMap<>();
         String subLine;
         
-        while ((subLine = reader.readLine()) != null && !subLine.trim().startsWith(PAGE_PREFIX) && !subLine.trim().startsWith(LIST_ITEM_PREFIX)) {
+        while ((subLine = reader.readLine()) != null && (
+            subLine.trim().startsWith(ENABLE_PREFIX) || subLine.trim().startsWith(ON_PREFIX) || subLine.trim().startsWith(LIST_ITEM_PREFIX))) {
             subLine = subLine.trim();
             if (subLine.startsWith(ENABLE_PREFIX)) {
                 enable = Boolean.parseBoolean(subLine.substring(ENABLE_PREFIX.length()).trim());
@@ -141,17 +156,45 @@ public class TestScenarioParser {
     
     private Tuple<Page> parsePage(String line, BufferedReader reader, int lineNumber) throws IOException {
         String pageName = line.substring(PAGE_PREFIX.length()).trim();
-        List<ExpectedElement> expectedList = parseExpected(reader, lineNumber);
-        Tuple<Action> actionResult = parseAction(reader, lineNumber);
+        String property = reader.readLine().trim();
+        Tuple<List<ExpectedElement>> expectedListResult = new Tuple<>(property, Collections.emptyList());
+        Tuple<Action> actionResult = new Tuple<>(property, null);
+        
+        boolean inPage = true;
+        while(inPage){
+            if(property.startsWith(ACTION_PREFIX)){
+                actionResult = parseAction(reader, lineNumber);
+                property = actionResult.lastLine();
+                inPage = lastScannedLineStartsWithExpected(actionResult.lastLine());
+            } else if(property.startsWith(EXPECTED_PREFIX)){
+                expectedListResult = parseExpected(reader, lineNumber);
+                property = expectedListResult.lastLine();
+                inPage = lastScannedLineStartsWithAction(expectedListResult.lastLine());
+            } else {
+                property = reader.readLine().trim();
+                inPage = !(lastScannedLineStartsWithPage(property) || lastScannedLineStartsWithFeatures(property));
+            }
+        }
+        
+        
         Action action = actionResult.object();
+        List<ExpectedElement> expectedList = expectedListResult.object();
         Page page = new Page(pageName, expectedList, action);
-        return new Tuple<>(actionResult.lastLine(), page);
+        return new Tuple<>(property, page);
     }
     
-    private List<ExpectedElement> parseExpected(BufferedReader reader, int lineNumber) throws IOException {
+    private boolean lastScannedLineStartsWithExpected(String lastLine){
+        return StringUtils.hasLength(lastLine) && lastLine.trim().startsWith(EXPECTED_PREFIX);
+    }
+    
+    private boolean lastScannedLineStartsWithAction(String lastLine){
+        return StringUtils.hasLength(lastLine) && lastLine.trim().startsWith(ACTION_PREFIX);
+    }
+    
+    private Tuple<List<ExpectedElement>> parseExpected(BufferedReader reader, int lineNumber) throws IOException {
         List<ExpectedElement> expectedList = new ArrayList<>();
         String subLine;
-        while ((subLine = reader.readLine()) != null && !subLine.trim().startsWith(ACTION_PREFIX)) {
+        while ((subLine = reader.readLine()) != null && subLine.trim().startsWith(LIST_ITEM_PREFIX)) {
             subLine = subLine.trim();
             if (subLine.startsWith(LIST_ITEM_PREFIX)) {
                 String[] parts = subLine.substring(LIST_ITEM_PREFIX.length()).split(FIELD_SEPARATOR);
@@ -164,14 +207,13 @@ public class TestScenarioParser {
                 }
             }
         }
-        return expectedList;
+        return new Tuple<>(subLine, expectedList);
     }
     
     private Tuple<Action> parseAction(BufferedReader reader, int lineNumber) throws IOException {
         String type = null;
         Map<String, String> data = new HashMap<>();
         String subLine;
-        String lastLineFromSubParsing = null;
         // Read until the end of the action block, or the next Page definition
         while ((subLine = reader.readLine()) != null && !subLine.trim().startsWith(PAGE_PREFIX) &&
             !subLine.trim().startsWith(FEATURES_PREFIX)) {
@@ -191,7 +233,6 @@ public class TestScenarioParser {
                 data.putAll(newFields);
             }
             
-            lastLineFromSubParsing = subLine;
         }
         
         if (type == null) {

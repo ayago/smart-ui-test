@@ -266,4 +266,25 @@ public class TestScenarioParserTest {
         assertThat(scenario.getPages(), hasSize(1));
     }
     
+    @Test
+    void parse_noExpectedKeyword_parsesWithoutExpected() throws IOException {
+        String testData = "Host: https://www.example.com\n" +
+            "Page 1\n" +
+            " - Element1: \"Value1\"\n" + // Missing "expected:" keyword
+            " - Element2: \"Value2\"\n" +
+            "action:\n" +
+            " type: Enter\n" +
+            " target-field: Field1\n" +
+            " value: Value1";
+        
+        when(actionFactory.getAction(eq(ActionType.Enter), anyMap()))
+            .thenReturn(new EnterAction("Field1", "Value1"));
+        
+        TestScenario scenario = parser.parse(createReader(testData));
+        assertNotNull(scenario);
+        assertEquals("https://www.example.com", scenario.getHost());
+        assertThat(scenario.getPages(), hasSize(1));
+        assertThat(scenario.getPages().get(0).getExpected(), hasSize(0)); // Ensure expected list is empty
+    }
+    
 }
