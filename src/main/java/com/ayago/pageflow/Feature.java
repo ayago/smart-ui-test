@@ -3,12 +3,12 @@ package com.ayago.pageflow;
 import java.util.Map;
 import java.util.Objects;
 
-public class FeatureFlag {
+public class Feature{
     private final String name;
     private final boolean enabled;
     private final Map<String, String> context;
     
-    public FeatureFlag(String name, boolean enabled, Map<String, String> context) {
+    public Feature(String name, boolean enabled, Map<String, String> context) {
         this.name = name;
         this.enabled = enabled;
         this.context = context;
@@ -30,7 +30,7 @@ public class FeatureFlag {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        FeatureFlag that = (FeatureFlag) o;
+        Feature that = (Feature) o;
         return enabled == that.enabled && Objects.equals(name, that.name) && Objects.equals(context, that.context);
     }
     

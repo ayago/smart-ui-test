@@ -1,8 +1,8 @@
 package com.ayago;
 
-import com.ayago.pageflow.PageFlowDefinition;
+import com.ayago.pageflow.TestScenario;
 import com.ayago.pageflow.PageFlowParser;
-import com.ayago.pageflow.PageModel;
+import com.ayago.pageflow.Page;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +33,12 @@ class SmartUIRunnerImpl implements CommandLineRunner{
     
     @Override
     public void run(String... args) throws Exception{
-        PageFlowDefinition definition = parser.parse("dashboard-flow.txt");
+        TestScenario definition = parser.parse("dashboard-flow.txt");
         
         System.out.println("Target Host: " + definition.getHost());
         featureManager.applyFeatureFlags(definition.getFeatureFlags());
         
-        for (PageModel page : definition.getPages()){
+        for (Page page : definition.getPages()){
             driver.get(definition.getHost()); // Replace with host + relative path if needed
             
             for (Map.Entry<String, String> expected : page.getExpectedFields().entrySet()){

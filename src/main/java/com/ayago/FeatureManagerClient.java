@@ -1,6 +1,6 @@
 package com.ayago;
 
-import com.ayago.pageflow.FeatureFlag;
+import com.ayago.pageflow.Feature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,8 +16,8 @@ class FeatureManagerClient {
     }
     
 
-    public void applyFeatureFlags(List<FeatureFlag> flags){
-        for (FeatureFlag flag : flags){
+    public void applyFeatureFlags(List<Feature> flags){
+        for (Feature flag : flags){
             System.out.println(
                 "[FeatureManager] Setting " + flag.getName() + " to " + flag.isEnabled() + " with context " + flag.getContext());
             // Simulate API call to set feature flag

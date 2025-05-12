@@ -18,23 +18,23 @@ import java.util.Map;
 @Component
 public class PageFlowParser {
     
-    public PageFlowDefinition parse(String fileName) throws IOException {
+    public TestScenario parse(String fileName) throws IOException {
         try (BufferedReader reader = prepareUITestFileReader(fileName)) {
             return parse(reader);
         }
     }
     
-    public PageFlowDefinition parse(BufferedReader reader) throws IOException {
+    public TestScenario parse(BufferedReader reader) throws IOException {
         String host = null;
-        final List<PageModel> pages = new ArrayList<>();
-        final List<FeatureFlag> featureFlags = new ArrayList<>();
+        final List<Page> pages = new ArrayList<>();
+        final List<Feature> features = new ArrayList<>();
         String line;
-        PageModel currentPage = null;
+        Page currentPage = null;
         boolean inExpected = false;
         boolean inGiven = false;
         boolean parsingFeatures = false;
         boolean parsingPage = false;
-        FeatureFlag currentFeature = null;
+        Feature currentFeature = null;
         
         while ((line = reader.readLine()) != null) {
             line = line.trim();
@@ -53,15 +53,15 @@ public class PageFlowParser {
                 final Map<String, String> expectedFields = new HashMap<>();
                 final Map<String, String> givenFieldValues = new HashMap<>();
                 
-                currentPage = new PageModel(name, Collections.unmodifiableMap(expectedFields), Collections.unmodifiableMap(givenFieldValues), null);
+                currentPage = new Page(name, Collections.unmodifiableMap(expectedFields), Collections.unmodifiableMap(givenFieldValues), null);
                 
             } else if (parsingFeatures && line.startsWith("- ")) {
                 if (currentFeature != null) {
-                    featureFlags.add(currentFeature);
+                    features.add(currentFeature);
                 }
-                currentFeature = new FeatureFlag(line.substring(2, line.indexOf(':')).trim(), false, Collections.unmodifiableMap(new HashMap<>())); //start with a new map
+                currentFeature = new Feature(line.substring(2, line.indexOf(':')).trim(), false, Collections.unmodifiableMap(new HashMap<>())); //start with a new map
             } else if (parsingFeatures && line.startsWith("enable:")) {
-                currentFeature = new FeatureFlag(currentFeature.getName(), Boolean.parseBoolean(line.substring(7).trim()), currentFeature.getContext());
+                currentFeature = new Feature(currentFeature.getName(), Boolean.parseBoolean(line.substring(7).trim()), currentFeature.getContext());
             } else if (parsingFeatures && line.startsWith("on:")) {
                 // skip line
             } else if (parsingFeatures && line.contains(":")) {
@@ -69,7 +69,7 @@ public class PageFlowParser {
                 if (kv.length == 2) {
                     Map<String, String> modifiableContext = new HashMap<>(currentFeature.getContext()); //create a modifiable copy.
                     modifiableContext.put(kv[0].trim(), kv[1].trim());
-                    currentFeature = new FeatureFlag(currentFeature.getName(), currentFeature.isEnabled(), Collections.unmodifiableMap(modifiableContext)); //create new FeatureFlag
+                    currentFeature = new Feature(currentFeature.getName(), currentFeature.isEnabled(), Collections.unmodifiableMap(modifiableContext)); //create new FeatureFlag
                 }
             } else if (parsingPage && line.startsWith("expected:")) {
                 inExpected = true;
@@ -80,7 +80,7 @@ public class PageFlowParser {
             } else if (parsingPage && line.startsWith("action:")) {
                 String actionButton = line.substring(7).trim();
                 if(currentPage != null) { //make sure currentPage is not null
-                    currentPage = new PageModel(currentPage.getName(), currentPage.getExpectedFields(), currentPage.getGivenFieldValues(), actionButton);
+                    currentPage = new Page(currentPage.getName(), currentPage.getExpectedFields(), currentPage.getGivenFieldValues(), actionButton);
                 }
                 inGiven = inExpected = false;
             } else if (line.startsWith("- ")) {
@@ -97,22 +97,22 @@ public class PageFlowParser {
                     if (inExpected && currentPage != null) {
                         Map<String, String> modifiableMap = new HashMap<>(currentPage.getExpectedFields());
                         modifiableMap.put(key, value);
-                        currentPage = new PageModel(currentPage.getName(), Collections.unmodifiableMap(modifiableMap), currentPage.getGivenFieldValues(), currentPage.getActionButton());
+                        currentPage = new Page(currentPage.getName(), Collections.unmodifiableMap(modifiableMap), currentPage.getGivenFieldValues(), currentPage.getActionButton());
                     } else if (inGiven && currentPage != null) {
                         Map<String, String> modifiableMap = new HashMap<>(currentPage.getGivenFieldValues());
                         modifiableMap.put(key, value);
-                        currentPage = new PageModel(currentPage.getName(), currentPage.getExpectedFields(), Collections.unmodifiableMap(modifiableMap), currentPage.getActionButton());
+                        currentPage = new Page(currentPage.getName(), currentPage.getExpectedFields(), Collections.unmodifiableMap(modifiableMap), currentPage.getActionButton());
                     }
                 }
             }
         }
         if (currentFeature != null) {
-            featureFlags.add(currentFeature);
+            features.add(currentFeature);
         }
         if (currentPage != null) {
             pages.add(currentPage);
         }
-        return new PageFlowDefinition(host, Collections.unmodifiableList(featureFlags), Collections.unmodifiableList(pages));
+        return new TestScenario(host, Collections.unmodifiableList(features), Collections.unmodifiableList(pages));
     }
     
     private BufferedReader prepareUITestFileReader(String fileName) throws FileNotFoundException {

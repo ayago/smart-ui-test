@@ -6,7 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="d1b51daa-cbf5-472c-9bf5-c61a15d66d3e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/FeatureManagerClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/FeatureManagerClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/SmartUIRunnerImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/SmartUIRunnerImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/pageflow/FeatureFlag.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/pageflow/Feature.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/pageflow/PageFlowDefinition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/pageflow/TestScenario.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/pageflow/PageFlowParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/pageflow/PageFlowParser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/pageflow/PageModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/pageflow/Page.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

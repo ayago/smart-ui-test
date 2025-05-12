@@ -3,13 +3,13 @@ package com.ayago.pageflow;
 import java.util.Map;
 import java.util.Objects;
 
-public class PageModel {
+public class Page{
     private final String name;
     private final Map<String, String> expectedFields;
     private final Map<String, String> givenFieldValues;
     private final String actionButton;
     
-    public PageModel(String name, Map<String, String> expectedFields, Map<String, String> givenFieldValues, String actionButton) {
+    public Page(String name, Map<String, String> expectedFields, Map<String, String> givenFieldValues, String actionButton) {
         this.name = name;
         this.expectedFields = expectedFields;
         this.givenFieldValues = givenFieldValues;
@@ -37,8 +37,8 @@ public class PageModel {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PageModel pageModel = (PageModel) o;
-        return Objects.equals(name, pageModel.name) && Objects.equals(expectedFields, pageModel.expectedFields) && Objects.equals(givenFieldValues, pageModel.givenFieldValues) && Objects.equals(actionButton, pageModel.actionButton);
+        Page page = (Page) o;
+        return Objects.equals(name, page.name) && Objects.equals(expectedFields, page.expectedFields) && Objects.equals(givenFieldValues, page.givenFieldValues) && Objects.equals(actionButton, page.actionButton);
     }
     
     @Override
