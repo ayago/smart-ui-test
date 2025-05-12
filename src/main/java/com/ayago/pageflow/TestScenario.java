@@ -19,7 +19,7 @@ public class TestScenario{
         return host;
     }
     
-    public List<Feature> getFeatureFlags() {
+    public List<Feature> getFeatures() {
         return features;
     }
     

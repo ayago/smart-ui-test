@@ -36,7 +36,7 @@ class SmartUIRunnerImpl implements CommandLineRunner{
         TestScenario definition = parser.parse("dashboard-flow.txt");
         
         System.out.println("Target Host: " + definition.getHost());
-        featureManager.applyFeatureFlags(definition.getFeatureFlags());
+        featureManager.applyFeatureFlags(definition.getFeatures());
         
         for (Page page : definition.getPages()){
             driver.get(definition.getHost()); // Replace with host + relative path if needed
