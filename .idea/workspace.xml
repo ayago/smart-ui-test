@@ -7,7 +7,6 @@
     <list default="true" id="d1b51daa-cbf5-472c-9bf5-c61a15d66d3e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/testscenario/parser/TestScenarioParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/testscenario/parser/TestScenarioParser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/ayago/testscenario/parser/TestScenarioParserTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/ayago/testscenario/parser/TestScenarioParserTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -132,7 +131,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TestScenarioParserTest.parse_validScenario_returnsTestScenario" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="TestScenarioParserTest.parse_threeActionTypes_parsesCorrectly" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="declarative-functional-test" />
       <extension name="coverage">
         <pattern>
@@ -142,7 +141,7 @@
       </extension>
       <option name="PACKAGE_NAME" value="com.ayago.testscenario.parser" />
       <option name="MAIN_CLASS_NAME" value="com.ayago.testscenario.parser.TestScenarioParserTest" />
-      <option name="METHOD_NAME" value="parse_validScenario_returnsTestScenario" />
+      <option name="METHOD_NAME" value="parse_threeActionTypes_parsesCorrectly" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -151,10 +150,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="JUnit.TestScenarioParserTest" />
+        <item itemvalue="JUnit.TestScenarioParserTest.parse_manyPages_parsesCorrectly" />
+        <item itemvalue="JUnit.TestScenarioParserTest.parse_threeActionTypes_parsesCorrectly" />
         <item itemvalue="JUnit.TestScenarioParserTest.parse_noExpectedKeyword_parsesWithoutExpected" />
         <item itemvalue="JUnit.TestScenarioParserTest.parse_featuresAfterHost_parsesCorrectly" />
-        <item itemvalue="JUnit.TestScenarioParserTest.parse_manyPages_parsesCorrectly" />
-        <item itemvalue="JUnit.TestScenarioParserTest.parse_validScenario_returnsTestScenario" />
       </list>
     </recent_temporary>
   </component>
@@ -168,6 +167,17 @@
       <updated>1746814202508</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -184,95 +194,55 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/ayago/testscenario/parser/TestScenarioParser.java</url>
-          <line>67</line>
+          <line>89</line>
           <option name="timeStamp" value="47" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/ayago/testscenario/parser/TestScenarioParser.java</url>
-          <line>181</line>
+          <line>192</line>
           <option name="timeStamp" value="51" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/ayago/testscenario/parser/TestScenarioParser.java</url>
-          <line>243</line>
+          <line>245</line>
           <option name="timeStamp" value="53" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/ayago/testscenario/parser/TestScenarioParser.java</url>
-          <line>79</line>
-          <option name="timeStamp" value="56" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/ayago/testscenario/parser/TestScenarioParser.java</url>
-          <line>162</line>
-          <option name="timeStamp" value="59" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/ayago/testscenario/parser/TestScenarioParser.java</url>
-          <line>164</line>
-          <option name="timeStamp" value="60" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/ayago/testscenario/parser/TestScenarioParser.java</url>
-          <line>168</line>
-          <option name="timeStamp" value="61" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/ayago/testscenario/parser/TestScenarioParser.java</url>
-          <line>170</line>
-          <option name="timeStamp" value="63" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/ayago/testscenario/parser/TestScenarioParser.java</url>
-          <line>63</line>
+          <line>68</line>
           <option name="timeStamp" value="64" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/ayago/testscenario/parser/TestScenarioParser.java</url>
-          <line>166</line>
-          <option name="timeStamp" value="65" />
+          <url>file://$PROJECT_DIR$/src/test/java/com/ayago/testscenario/parser/TestScenarioParserTest.java</url>
+          <line>129</line>
+          <option name="timeStamp" value="75" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/ayago/testscenario/parser/TestScenarioParser.java</url>
-          <line>71</line>
-          <option name="timeStamp" value="66" />
+          <line>163</line>
+          <option name="timeStamp" value="78" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/ayago/testscenario/parser/TestScenarioParser.java</url>
-          <line>73</line>
-          <option name="timeStamp" value="67" />
+          <line>161</line>
+          <option name="timeStamp" value="80" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/ayago/testscenario/parser/TestScenarioParser.java</url>
-          <line>77</line>
-          <option name="timeStamp" value="68" />
+          <line>176</line>
+          <option name="timeStamp" value="81" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/ayago/testscenario/parser/TestScenarioParser.java</url>
-          <line>83</line>
-          <option name="timeStamp" value="69" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/ayago/testscenario/parser/TestScenarioParser.java</url>
-          <line>85</line>
-          <option name="timeStamp" value="70" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/ayago/testscenario/parser/TestScenarioParser.java</url>
-          <line>158</line>
-          <option name="timeStamp" value="71" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/ayago/testscenario/parser/TestScenarioParser.java</url>
-          <line>125</line>
-          <option name="timeStamp" value="72" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/ayago/testscenario/parser/TestScenarioParser.java</url>
-          <line>174</line>
-          <option name="timeStamp" value="74" />
+          <url>file://$PROJECT_DIR$/src/test/java/com/ayago/testscenario/parser/TestScenarioParserTest.java</url>
+          <line>156</line>
+          <option name="timeStamp" value="83" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="com.ayago.testscenario.TestScenario" memberName="pages" />
+      </pinned-members>
+    </pin-to-top-manager>
   </component>
 </project>

@@ -22,7 +22,6 @@ public class TestScenarioParser {
     
     // Use descriptive names for constants
     private static final String HOST_PREFIX = "Host:";
-    private static final String FEATURES_KEYWORD = "Features:";
     private static final String FEATURES_PREFIX = "Features";
     private static final String PAGE_PREFIX = "Page";
     private static final String ACTION_PREFIX = "action:";
@@ -34,9 +33,13 @@ public class TestScenarioParser {
     private static final String FIELDS_PREFIX = "fields:"; // Added for consistency
     private static final String EXPECTED_PREFIX = "expected:";
     private static final String ON_PREFIX = "on:";
+    private static final String TARGET_FIELD_LABEL = "target-field:";
+    private static final String TARGET_LABEL = "target:";
+    private static final String VALUE_LABEL = "value:";
+    private static final String TYPE_LABEL = "type:";
     
     // Use a record for internal data transfer
-    private record Tuple<T>(String lastLine, T object) {
+    private record ParseResult<T>(String lastLine, T object) {
     }
     
     private final ActionFactory actionFactory;
@@ -64,18 +67,18 @@ public class TestScenarioParser {
                     host = parseHost(line, lineNumber);
                     pageWasLastLine = false;
                     featuresWasLine = false;
-                } else if (featuresWasLine || line.equals(FEATURES_KEYWORD)) {
-                    Tuple<Map<String, Feature>> featuresResult = parseFeatures(reader, lineNumber);
+                } else if (featuresWasLine || line.startsWith(FEATURES_PREFIX)) {
+                    ParseResult<Map<String, Feature>> featuresResult = parseFeatures(reader, lineNumber);
                     features = featuresResult.object();
                     lastLineThisPass = featuresResult.lastLine();
-                    pageWasLastLine = lastScannedLineStartsWithPage(lastLineThisPass);
-                    featuresWasLine = lastScannedLineStartsWithFeatures(lastLineThisPass);
+                    pageWasLastLine = lineStartsWith(lastLineThisPass, PAGE_PREFIX);
+                    featuresWasLine = lineStartsWith(lastLineThisPass, FEATURES_PREFIX);
                 } else if (pageWasLastLine || line.startsWith(PAGE_PREFIX)) {
-                    Tuple<Page> pageResult = parsePage(line, reader, lineNumber);
+                    ParseResult<Page> pageResult = parsePage(line, reader, lineNumber);
                     pages.add(pageResult.object());
                     lastLineThisPass = pageResult.lastLine();
-                    pageWasLastLine = lastScannedLineStartsWithPage(lastLineThisPass);
-                    featuresWasLine = lastScannedLineStartsWithFeatures(lastLineThisPass);
+                    pageWasLastLine = lineStartsWith(lastLineThisPass, PAGE_PREFIX);
+                    featuresWasLine = lineStartsWith(lastLineThisPass, FEATURES_PREFIX);
                 } else if (!line.isEmpty() && !line.startsWith(COMMENT_PREFIX)) {
                     throw new IOException("Invalid line format on line " + lineNumber + ": " + line);
                 }
@@ -98,12 +101,8 @@ public class TestScenarioParser {
         return new TestScenario(host, features, pages);
     }
     
-    private boolean lastScannedLineStartsWithFeatures(String lastLine){
-        return StringUtils.hasLength(lastLine) && lastLine.trim().startsWith(FEATURES_PREFIX);
-    }
-    
-    private boolean lastScannedLineStartsWithPage(String lastLine) {
-        return StringUtils.hasLength(lastLine) && lastLine.trim().startsWith(PAGE_PREFIX);
+    private boolean lineStartsWith(String lastLine, String prefix){
+        return StringUtils.hasLength(lastLine) && lastLine.trim().startsWith(prefix);
     }
     
     private String parseHost(String line, int lineNumber) throws IOException {
@@ -113,20 +112,18 @@ public class TestScenarioParser {
         return line.substring(HOST_PREFIX.length()).trim();
     }
     
-    private Tuple<Map<String, Feature>> parseFeatures(BufferedReader reader, int lineNumber) throws IOException {
+    private ParseResult<Map<String, Feature>> parseFeatures(BufferedReader reader, int lineNumber) throws IOException {
         Map<String, Feature> features = new HashMap<>();
         String line;
-        String lastLineFromSubParsing = null;
         while ((line = reader.readLine()) != null && line.trim().startsWith(LIST_ITEM_PREFIX)) {
-            Tuple<Feature> featureResult = parseFeature(line, reader, lineNumber);
+            ParseResult<Feature> featureResult = parseFeature(line, reader, lineNumber);
             Feature feature = featureResult.object();
             features.put(feature.getName(), feature);
-            lastLineFromSubParsing = featureResult.lastLine();
         }
-        return new Tuple<>(line, features);
+        return new ParseResult<>(line, features);
     }
     
-    private Tuple<Feature> parseFeature(String line, BufferedReader reader, int lineNumber) throws IOException {
+    private ParseResult<Feature> parseFeature(String line, BufferedReader reader, int lineNumber) throws IOException {
         String featureName;
         try {
             featureName = line.substring(LIST_ITEM_PREFIX.length(), line.indexOf(FIELD_SEPARATOR)).trim();
@@ -149,30 +146,29 @@ public class TestScenarioParser {
                     on.put(parts[0].trim(), parts[1].trim());
                 }
             }
-            // handle other cases
         }
-        return new Tuple<>(subLine, new Feature(enable, on, featureName));
+        return new ParseResult<>(subLine, new Feature(enable, on, featureName));
     }
     
-    private Tuple<Page> parsePage(String line, BufferedReader reader, int lineNumber) throws IOException {
+    private ParseResult<Page> parsePage(String line, BufferedReader reader, int lineNumber) throws IOException {
         String pageName = line.substring(PAGE_PREFIX.length()).trim();
-        String property = reader.readLine().trim();
-        Tuple<List<ExpectedElement>> expectedListResult = new Tuple<>(property, Collections.emptyList());
-        Tuple<Action> actionResult = new Tuple<>(property, null);
+        String subLine = reader.readLine().trim();
+        ParseResult<List<ExpectedElement>> expectedListResult = new ParseResult<>(subLine, Collections.emptyList());
+        ParseResult<Action> actionResult = new ParseResult<>(subLine, null);
         
         boolean inPage = true;
         while(inPage){
-            if(property.startsWith(ACTION_PREFIX)){
+            if(subLine.startsWith(ACTION_PREFIX)){
                 actionResult = parseAction(reader, lineNumber);
-                property = actionResult.lastLine();
-                inPage = lastScannedLineStartsWithExpected(actionResult.lastLine());
-            } else if(property.startsWith(EXPECTED_PREFIX)){
+                subLine = actionResult.lastLine();
+                inPage = lineStartsWith(subLine, EXPECTED_PREFIX);
+            } else if(subLine.startsWith(EXPECTED_PREFIX)){
                 expectedListResult = parseExpected(reader, lineNumber);
-                property = expectedListResult.lastLine();
-                inPage = lastScannedLineStartsWithAction(expectedListResult.lastLine());
+                subLine = expectedListResult.lastLine();
+                inPage = lineStartsWith(subLine, ACTION_PREFIX);
             } else {
-                property = reader.readLine().trim();
-                inPage = !(lastScannedLineStartsWithPage(property) || lastScannedLineStartsWithFeatures(property));
+                subLine = reader.readLine().trim();
+                inPage = !(lineStartsWith(subLine, PAGE_PREFIX) || lineStartsWith(subLine, FEATURES_PREFIX));
             }
         }
         
@@ -180,18 +176,10 @@ public class TestScenarioParser {
         Action action = actionResult.object();
         List<ExpectedElement> expectedList = expectedListResult.object();
         Page page = new Page(pageName, expectedList, action);
-        return new Tuple<>(property, page);
+        return new ParseResult<>(subLine, page);
     }
     
-    private boolean lastScannedLineStartsWithExpected(String lastLine){
-        return StringUtils.hasLength(lastLine) && lastLine.trim().startsWith(EXPECTED_PREFIX);
-    }
-    
-    private boolean lastScannedLineStartsWithAction(String lastLine){
-        return StringUtils.hasLength(lastLine) && lastLine.trim().startsWith(ACTION_PREFIX);
-    }
-    
-    private Tuple<List<ExpectedElement>> parseExpected(BufferedReader reader, int lineNumber) throws IOException {
+    private ParseResult<List<ExpectedElement>> parseExpected(BufferedReader reader, int lineNumber) throws IOException {
         List<ExpectedElement> expectedList = new ArrayList<>();
         String subLine;
         while ((subLine = reader.readLine()) != null && subLine.trim().startsWith(LIST_ITEM_PREFIX)) {
@@ -207,10 +195,10 @@ public class TestScenarioParser {
                 }
             }
         }
-        return new Tuple<>(subLine, expectedList);
+        return new ParseResult<>(subLine, expectedList);
     }
     
-    private Tuple<Action> parseAction(BufferedReader reader, int lineNumber) throws IOException {
+    private ParseResult<Action> parseAction(BufferedReader reader, int lineNumber) throws IOException {
         String type = null;
         Map<String, String> data = new HashMap<>();
         String subLine;
@@ -219,14 +207,14 @@ public class TestScenarioParser {
             !subLine.trim().startsWith(FEATURES_PREFIX)) {
             subLine = subLine.trim();
             String trimmedValue = subLine.substring(subLine.indexOf(":") + 1).trim();
-            if (subLine.startsWith("type:")) {
+            if (subLine.startsWith(TYPE_LABEL)) {
                 type = trimmedValue;
                 data.put("type", type);
-            } else if (subLine.startsWith("target-field:")) {
+            } else if (subLine.startsWith(TARGET_FIELD_LABEL)) {
                 data.put("targetField", trimmedValue);
-            } else if (subLine.startsWith("target:")) {
+            } else if (subLine.startsWith(TARGET_LABEL)) {
                 data.put("target", trimmedValue);
-            } else if (subLine.startsWith("value:")) {
+            } else if (subLine.startsWith(VALUE_LABEL)) {
                 data.put("value", trimmedValue);
             } else if (subLine.startsWith(FIELDS_PREFIX)) {
                 Map<String, String> newFields = parseFields(reader, lineNumber);
@@ -242,7 +230,7 @@ public class TestScenarioParser {
         try {
             ActionType actionType = ActionType.valueOf(type);
             Action action =  actionFactory.getAction(actionType, data);
-            return new Tuple<>(subLine, action);
+            return new ParseResult<>(subLine, action);
         } catch (IllegalArgumentException e) {
             throw new IOException("Unknown action type at line " + lineNumber + ": " + type, e);
         }
