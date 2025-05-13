@@ -287,4 +287,12 @@ public class TestScenarioParserTest {
         assertThat(scenario.getPages().get(0).getExpected(), hasSize(0)); // Ensure expected list is empty
     }
     
+    @Test
+    void parse_emptyFile_throwsIOException() {
+        String testData = ""; // Empty file content
+        
+        IOException exception = assertThrows(IOException.class, () -> parser.parse(createReader(testData)));
+        assertEquals("Missing 'Host' definition in test scenario.", exception.getMessage());
+    }
+    
 }
