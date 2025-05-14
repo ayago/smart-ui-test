@@ -1,26 +1,28 @@
 package com.ayago;
 
-import com.ayago.pageflow.Feature;
+import com.ayago.smartuitest.testscenario.TestScenario;
+import com.ayago.smartuitest.testscenario.TestScenario.Feature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.Map;
 
 @Component
 class FeatureManagerClient {
-    private final CacheManagerImpl cacheManager;
+    private final CacheManager cacheManager;
     
     @Autowired
-    public FeatureManagerClient(CacheManagerImpl cacheManager){
+    public FeatureManagerClient(CacheManager cacheManager){
         this.cacheManager = cacheManager;
     }
     
 
-    public void applyFeatureFlags(List<Feature> flags){
-        for (Feature flag : flags){
+    public void applyFeatureFlags(Map<String, TestScenario.Feature> flags){
+        for (Map.Entry<String, Feature> entry : flags.entrySet()){
+            Feature flag = entry.getValue();
             System.out.println(
-                "[FeatureManager] Setting " + flag.getName() + " to " + flag.isEnabled() + " with context " + flag.getContext());
-            // Simulate API call to set feature flag
+                "[FeatureManager] Setting " + entry.getKey() + " to " + flag.isEnable() + " with context " + flag.getContext());
+            // Simulate API call to set feature entry
         }
         cacheManager.clear();
     }

@@ -1,6 +1,6 @@
-package com.ayago.testscenario.parser;
+package com.ayago.smartuitest.testscenario.parser;
 
-import com.ayago.testscenario.Action;
+import com.ayago.smartuitest.testscenario.Action;
 
 import java.util.Map;
 

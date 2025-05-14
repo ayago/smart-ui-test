@@ -1,4 +1,4 @@
-package com.ayago.testscenario;
+package com.ayago.smartuitest.testscenario;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;

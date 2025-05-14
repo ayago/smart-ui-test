@@ -1,17 +1,22 @@
-package com.ayago.testscenario.parser;
+package com.ayago.smartuitest.testscenario.parser;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
-import com.ayago.testscenario.Action;
-import com.ayago.testscenario.TestScenario;
-import com.ayago.testscenario.TestScenario.ExpectedElement;
-import com.ayago.testscenario.TestScenario.Feature;
-import com.ayago.testscenario.TestScenario.Page;
+import com.ayago.smartuitest.testscenario.Action;
+import com.ayago.smartuitest.testscenario.TestScenario;
+import com.ayago.smartuitest.testscenario.TestScenario.ExpectedElement;
+import com.ayago.smartuitest.testscenario.TestScenario.Feature;
+import com.ayago.smartuitest.testscenario.TestScenario.Page;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
@@ -46,6 +51,12 @@ public class TestScenarioParser {
     
     public TestScenarioParser(ActionFactory actionFactory) {
         this.actionFactory = actionFactory;
+    }
+    
+    public TestScenario parse(String fileName) throws IOException {
+        try (BufferedReader reader = prepareUITestFileReader(fileName)) {
+            return parse(reader);
+        }
     }
     
     public TestScenario parse(BufferedReader reader) throws IOException {
@@ -251,5 +262,17 @@ public class TestScenarioParser {
             }
         }
         return fields;
+    }
+    
+    private BufferedReader prepareUITestFileReader(String fileName) throws FileNotFoundException{
+        File inputFile = new File(fileName);
+        if (inputFile.exists()) {
+            return new BufferedReader(new FileReader(inputFile));
+        }
+        InputStream resourceStream = getClass().getClassLoader().getResourceAsStream(fileName);
+        if (resourceStream == null) {
+            throw new FileNotFoundException(String.format("%s not found in resources folder", fileName));
+        }
+        return new BufferedReader(new InputStreamReader(resourceStream));
     }
 }

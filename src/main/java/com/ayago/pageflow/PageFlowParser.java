@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Component
+//@Component
 public class PageFlowParser {
     
     public TestScenario parse(String fileName) throws IOException {

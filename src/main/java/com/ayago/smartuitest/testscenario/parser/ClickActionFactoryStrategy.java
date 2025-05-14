@@ -1,7 +1,7 @@
-package com.ayago.testscenario.parser;
+package com.ayago.smartuitest.testscenario.parser;
 
-import com.ayago.testscenario.Action;
-import com.ayago.testscenario.ClickAction;
+import com.ayago.smartuitest.testscenario.Action;
+import com.ayago.smartuitest.testscenario.ClickAction;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;

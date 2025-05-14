@@ -1,10 +1,13 @@
 package com.ayago.testscenario.parser;
 
-import com.ayago.testscenario.Action;
-import com.ayago.testscenario.ClickAction;
-import com.ayago.testscenario.EnterAction;
-import com.ayago.testscenario.SubmitAction;
-import com.ayago.testscenario.TestScenario;
+import com.ayago.smartuitest.testscenario.Action;
+import com.ayago.smartuitest.testscenario.ClickAction;
+import com.ayago.smartuitest.testscenario.EnterAction;
+import com.ayago.smartuitest.testscenario.SubmitAction;
+import com.ayago.smartuitest.testscenario.TestScenario;
+import com.ayago.smartuitest.testscenario.parser.ActionFactory;
+import com.ayago.smartuitest.testscenario.parser.ActionType;
+import com.ayago.smartuitest.testscenario.parser.TestScenarioParser;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

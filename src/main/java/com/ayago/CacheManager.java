@@ -3,7 +3,7 @@ package com.ayago;
 import org.springframework.stereotype.Component;
 
 @Component
-class CacheManagerImpl {
+class CacheManager{
 
     public void clear(){
         System.out.println("[CacheManager] Clearing cache...");
