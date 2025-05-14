@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class WebInteractionEngine {
-    private final WebDriver driver;
     private final ActionStrategyRegistry strategyRegistry;
     private final ElementResolver elementResolver; // Instance of WebDriverElementResolver
     
@@ -33,11 +32,10 @@ public class WebInteractionEngine {
         if (strategyRegistry == null) {
             throw new IllegalArgumentException("ActionStrategyRegistry cannot be null for SmartLocatorEngine.");
         }
-        this.driver = driver;
         this.strategyRegistry = strategyRegistry;
         // Instantiate WebDriverElementResolver directly, passing the WebDriver instance.
         // This elementResolver will be used by the strategies.
-        this.elementResolver = new WebDriverElementResolver(this.driver);
+        this.elementResolver = new WebDriverElementResolver(driver);
     }
     
     /**
@@ -61,7 +59,7 @@ public class WebInteractionEngine {
         // Execute the action using the chosen strategy.
         // Pass the WebDriver and the internally managed ElementResolver instance.
         // The strategy will use this elementResolver to call resolveField.
-        strategy.execute(action, this.driver, this.elementResolver);
+        strategy.execute(action, this.elementResolver);
         
         System.out.println("SmartLocatorEngine: Action performed successfully: " + action.toString());
     }

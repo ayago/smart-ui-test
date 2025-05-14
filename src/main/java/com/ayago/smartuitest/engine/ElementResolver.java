@@ -1,5 +1,6 @@
 package com.ayago.smartuitest.engine;
 
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 /**
@@ -7,7 +8,7 @@ import org.openqa.selenium.WebElement;
  * This interface is used to decouple action strategies from the concrete
  * implementation of element location.
  */
-interface ElementResolver {
+public interface ElementResolver {
     /**
      * Attempts to find a web element based on a field name.
      *
@@ -17,4 +18,6 @@ interface ElementResolver {
      * @throws RuntimeException if the field cannot be found.
      */
     WebElement resolveField(String fieldName);
+    
+    WebDriver underlyingDriver();
 }

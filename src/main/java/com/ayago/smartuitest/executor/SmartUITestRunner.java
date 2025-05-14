@@ -1,4 +1,4 @@
-package com.ayago;
+package com.ayago.smartuitest.executor;
 
 
 import com.ayago.smartuitest.engine.WebInteractionEngine;
@@ -13,14 +13,14 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 @Component
-class SmartUIRunner implements CommandLineRunner{
+class SmartUITestRunner implements CommandLineRunner{
     private final TestScenarioParser parser;
     private final WebDriver driver;
     private final WebInteractionEngine interactionEngine;
     private final FeatureManagerClient featureManager;
     
     @Autowired
-    public SmartUIRunner(
+    public SmartUITestRunner(
         TestScenarioParser parser,
         WebDriver driver,
         WebInteractionEngine interactionEngine,

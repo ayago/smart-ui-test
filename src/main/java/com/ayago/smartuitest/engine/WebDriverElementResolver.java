@@ -100,5 +100,10 @@ class WebDriverElementResolver implements ElementResolver {
         System.err.println("WebDriverElementResolver: Field not found using any strategy: " + fieldName);
         throw new RuntimeException("Field not found: " + fieldName + " (WebDriverElementResolver)");
     }
+    
+    @Override
+    public WebDriver underlyingDriver(){
+        return driver;
+    }
 }
 

@@ -1,4 +1,4 @@
-package com.ayago;
+package com.ayago.smartuitest.executor;
 
 import org.springframework.stereotype.Component;
 

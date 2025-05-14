@@ -1,4 +1,4 @@
-package com.ayago;
+package com.ayago.smartuitest.executor;
 
 import com.ayago.smartuitest.testscenario.TestScenario;
 import com.ayago.smartuitest.testscenario.TestScenario.Feature;

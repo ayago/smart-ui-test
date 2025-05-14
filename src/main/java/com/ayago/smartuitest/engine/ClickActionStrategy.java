@@ -4,7 +4,6 @@ import com.ayago.smartuitest.testscenario.Action;
 import com.ayago.smartuitest.testscenario.ClickAction;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.springframework.stereotype.Component;
 
@@ -20,13 +19,12 @@ class ClickActionStrategy implements ActionStrategy {
      * Executes the click action.
      *
      * @param action   The action details, expected to be an instance of ClickAction.
-     * @param driver   The WebDriver instance to interact with the browser.
      * @param resolver The ElementResolver to find web elements if direct lookup fails.
      * @throws IllegalArgumentException if the action is not a ClickAction or if the target is null/empty.
      * @throws RuntimeException         if the target element cannot be found or clicked.
      */
     @Override
-    public void execute(Action action, WebDriver driver, ElementResolver resolver) {
+    public void execute(Action action, ElementResolver resolver) {
         if (!(action instanceof ClickAction clickAction)) {
             throw new IllegalArgumentException("Action provided is not an instance of ClickAction: " + action.getClass().getName());
         }
@@ -46,7 +44,7 @@ class ClickActionStrategy implements ActionStrategy {
             // 2. <a> (link) elements with matching normalized text.
             // 3. <input type="button"> elements with matching @value attribute.
             // 4. <input type="submit"> elements with matching @value attribute.
-            elementToClick = driver.findElement(By.xpath(
+            elementToClick = resolver.underlyingDriver().findElement(By.xpath(
                 "//button[normalize-space(.)='" + target + "'] | " +
                     "//a[normalize-space(.)='" + target + "'] | " +
                     "//input[@type='button' and @value='" + target + "'] | " +

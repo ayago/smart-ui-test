@@ -2,7 +2,6 @@ package com.ayago.smartuitest.engine;
 
 import com.ayago.smartuitest.testscenario.Action;
 import com.ayago.smartuitest.testscenario.EnterAction;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.springframework.stereotype.Component;
 
@@ -18,14 +17,12 @@ class EnterActionStrategy implements ActionStrategy {
      * Executes the enter (type text) action.
      *
      * @param action   The action details, expected to be an instance of EnterAction.
-     * @param driver   The WebDriver instance (not directly used by this strategy as element interaction
-     * is via WebElement methods, but kept for interface consistency).
      * @param resolver The ElementResolver to find the target web element.
      * @throws IllegalArgumentException if the action is not an EnterAction, or if targetField/value are invalid.
      * @throws RuntimeException         if the target field cannot be found or interacted with.
      */
     @Override
-    public void execute(Action action, WebDriver driver, ElementResolver resolver) {
+    public void execute(Action action, ElementResolver resolver) {
         if (!(action instanceof EnterAction enterAction)) {
             throw new IllegalArgumentException("Action provided is not an instance of EnterAction: " + action.getClass().getName());
         }

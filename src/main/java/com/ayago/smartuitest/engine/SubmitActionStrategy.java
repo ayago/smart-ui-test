@@ -4,7 +4,6 @@ import com.ayago.smartuitest.testscenario.Action;
 import com.ayago.smartuitest.testscenario.SubmitAction;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.springframework.stereotype.Component;
 
@@ -26,14 +25,13 @@ class SubmitActionStrategy implements ActionStrategy {
      * If no fields are provided, it tries to click a generic submit button directly.
      *
      * @param action   The action details, expected to be an instance of SubmitAction.
-     * @param driver   The WebDriver instance to interact with the browser.
      * @param resolver The ElementResolver to find web elements.
      * @throws IllegalArgumentException if the action is not a SubmitAction.
      * @throws RuntimeException         if a required field cannot be found or interacted with,
-     * or if submission fails critically.
+     *                                  or if submission fails critically.
      */
     @Override
-    public void execute(Action action, WebDriver driver, ElementResolver resolver) {
+    public void execute(Action action, ElementResolver resolver) {
         if (!(action instanceof SubmitAction submitAction)) {
             throw new IllegalArgumentException("Action provided is not an instance of SubmitAction: " + action.getClass().getName());
         }
@@ -45,7 +43,7 @@ class SubmitActionStrategy implements ActionStrategy {
             System.out.println("SubmitAction: No fields specified. Attempting to click a generic submit button.");
             try {
                 // Comprehensive XPath for various common submit button patterns.
-                WebElement submitButton = driver.findElement(By.xpath(
+                WebElement submitButton = resolver.underlyingDriver().findElement(By.xpath(
                     "//input[@type='submit'] | " +
                         "//button[@type='submit'] | " +
                         "//button[contains(translate(normalize-space(.), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'submit')] | " +
@@ -110,7 +108,7 @@ class SubmitActionStrategy implements ActionStrategy {
                 System.err.println("SubmitAction: Calling .submit() on the last field's form failed. " +
                     "Attempting to click a generic submit button as a fallback. Original error: " + e.getMessage());
                 try {
-                    WebElement submitButton = driver.findElement(By.xpath(
+                    WebElement submitButton = resolver.underlyingDriver().findElement(By.xpath(
                         "//input[@type='submit'] | //button[@type='submit'] | //button[contains(translate(normalize-space(.), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'submit')]"
                     ));
                     submitButton.click();

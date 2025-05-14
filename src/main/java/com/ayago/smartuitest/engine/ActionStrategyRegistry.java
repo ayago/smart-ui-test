@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
-import java.util.HashMap; // Explicitly import HashMap
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Component
 public class ActionStrategyRegistry {
 
-    private Map<Class<? extends Action>, ActionStrategy> strategyMap;
+    private final Map<Class<? extends Action>, ActionStrategy> strategyMap;
     
     /**
      * Constructs the registry.
@@ -78,35 +78,6 @@ public class ActionStrategyRegistry {
         ActionStrategy strategy = strategyMap.get(action.getClass());
         if (strategy == null) {
             throw new IllegalArgumentException("No strategy found for action type: " + action.getClass().getName() +
-                ". Available strategies are registered for types: " + strategyMap.keySet());
-        }
-        return strategy;
-    }
-    
-    /**
-     * Retrieves the appropriate strategy for the given Action class.
-     * This can be useful for checking if a strategy exists for a certain type without an instance.
-     *
-     * @param actionClass The Class of the Action for which to find a strategy.
-     * @return The ActionStrategy capable of handling the provided action class.
-     * @throws IllegalArgumentException if the actionClass is null or no strategy is found.
-     * @throws IllegalStateException if the registry was not properly initialized.
-     */
-    public ActionStrategy getStrategy(Class<? extends Action> actionClass) {
-        if (actionClass == null) {
-            throw new IllegalArgumentException("Action class cannot be null when retrieving a strategy.");
-        }
-        if (strategyMap == null) {
-            throw new IllegalStateException("ActionStrategyRegistry's strategyMap is not initialized.");
-        }
-        if (strategyMap.isEmpty()) {
-            System.err.println("ActionStrategyRegistry has no strategies loaded. Cannot find strategy for class: " + actionClass.getName());
-            throw new IllegalStateException("ActionStrategyRegistry contains no strategies.");
-        }
-        
-        ActionStrategy strategy = strategyMap.get(actionClass);
-        if (strategy == null) {
-            throw new IllegalArgumentException("No strategy found for action class: " + actionClass.getName() +
                 ". Available strategies are registered for types: " + strategyMap.keySet());
         }
         return strategy;

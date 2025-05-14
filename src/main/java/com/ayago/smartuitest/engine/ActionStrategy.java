@@ -1,7 +1,6 @@
 package com.ayago.smartuitest.engine;
 
 import com.ayago.smartuitest.testscenario.Action;
-import org.openqa.selenium.WebDriver;
 
 /**
  * Defines the contract for executing a specific web browser action.
@@ -12,11 +11,10 @@ public interface ActionStrategy {
     /**
      * Executes the specific web action.
      *
-     * @param action The action details derived from the test scenario.
-     * @param driver The WebDriver instance to interact with the browser.
+     * @param action   The action details derived from the test scenario.
      * @param resolver The ElementResolver instance to find web elements.
      */
-    void execute(Action action, WebDriver driver, ElementResolver resolver);
+    void execute(Action action, ElementResolver resolver);
     
     /**
      * Returns the concrete Action class (e.g., ClickAction.class) that this strategy handles.
