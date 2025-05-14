@@ -3,7 +3,9 @@ package com.ayago.smartuitest.testscenario;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.util.CollectionUtils;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -94,7 +96,7 @@ public class TestScenario {
         
         public Page(String name, List<ExpectedElement> expected, Action action) {
             this.name = name;
-            this.expected = expected;
+            this.expected = CollectionUtils.isEmpty(expected) ? Collections.emptyList() : expected;
             this.action = action;
         }
         

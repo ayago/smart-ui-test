@@ -5,8 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d1b51daa-cbf5-472c-9bf5-c61a15d66d3e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/engine/WebInteractionEngineFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/testscenario/json/ActionDeserializer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/testscenario/json/ActionMixIns.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/testscenario/json/JsonTestScenarioParser.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/testscenario/json/TestScenarioMixIns.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/ayago/smartuitest/testscenario/json/JsonTestScenarioParserTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/testscenario/TestScenario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/testscenario/TestScenario.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,26 +39,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.SmartUITestApplication.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.TestScenarioParserTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.TestScenarioParserTest.parse_featuresAfterHost_parsesCorrectly.executor&quot;: &quot;Debug&quot;,
-    &quot;JUnit.TestScenarioParserTest.parse_featuresAtEnd_parsesCorrectly.executor&quot;: &quot;Debug&quot;,
-    &quot;JUnit.TestScenarioParserTest.parse_manyPages_parsesCorrectly.executor&quot;: &quot;Debug&quot;,
-    &quot;JUnit.TestScenarioParserTest.parse_noExpectedKeyword_parsesWithoutExpected.executor&quot;: &quot;Debug&quot;,
-    &quot;JUnit.TestScenarioParserTest.parse_threeActionTypes_parsesCorrectly.executor&quot;: &quot;Debug&quot;,
-    &quot;JUnit.TestScenarioParserTest.parse_validScenario_returnsTestScenario.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/adriancyago/Documents/Personal/projects/declarative-functional-test/src/main/java/com/ayago&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.SmartUITestApplication.executor": "Run",
+    "JUnit.JsonTestScenarioParserTest.executor": "Run",
+    "JUnit.TestScenarioParserTest.executor": "Run",
+    "JUnit.TestScenarioParserTest.parse_featuresAfterHost_parsesCorrectly.executor": "Debug",
+    "JUnit.TestScenarioParserTest.parse_featuresAtEnd_parsesCorrectly.executor": "Debug",
+    "JUnit.TestScenarioParserTest.parse_manyPages_parsesCorrectly.executor": "Debug",
+    "JUnit.TestScenarioParserTest.parse_noExpectedKeyword_parsesWithoutExpected.executor": "Debug",
+    "JUnit.TestScenarioParserTest.parse_threeActionTypes_parsesCorrectly.executor": "Debug",
+    "JUnit.TestScenarioParserTest.parse_validScenario_returnsTestScenario.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/adriancyago/Documents/Personal/projects/declarative-functional-test/src/main/java/com/ayago",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.ayago.testscenario" />
@@ -61,13 +68,15 @@
       <recent name="$PROJECT_DIR$/src/main/java/com/ayago" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.ayago.smartuitest.testscenario.json" />
       <recent name="com.ayago" />
     </key>
     <key name="MoveInnerDialog.RECENTS_KEY">
+      <recent name="com.ayago.smartuitest.testscenario.json" />
       <recent name="com.ayago.testscenario" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.SmartUITestApplication">
+  <component name="RunManager" selected="JUnit.java in declarative-functional-test">
     <configuration name="SmartUITestApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.ayago.smartuitest.SmartUITestApplication" />
       <module name="declarative-functional-test" />
@@ -77,6 +86,21 @@
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="JsonTestScenarioParserTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="declarative-functional-test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.ayago.smartuitest.testscenario.json.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.ayago.smartuitest.testscenario.json" />
+      <option name="MAIN_CLASS_NAME" value="com.ayago.smartuitest.testscenario.json.JsonTestScenarioParserTest" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -112,45 +136,21 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TestScenarioParserTest.parse_noExpectedKeyword_parsesWithoutExpected" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="java in declarative-functional-test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="declarative-functional-test" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.ayago.testscenario.parser.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.ayago.testscenario.parser" />
-      <option name="MAIN_CLASS_NAME" value="com.ayago.testscenario.parser.TestScenarioParserTest" />
-      <option name="METHOD_NAME" value="parse_noExpectedKeyword_parsesWithoutExpected" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="TestScenarioParserTest.parse_threeActionTypes_parsesCorrectly" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="declarative-functional-test" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.ayago.testscenario.parser.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.ayago.testscenario.parser" />
-      <option name="MAIN_CLASS_NAME" value="com.ayago.testscenario.parser.TestScenarioParserTest" />
-      <option name="METHOD_NAME" value="parse_threeActionTypes_parsesCorrectly" />
-      <option name="TEST_OBJECT" value="method" />
+      <option name="TEST_OBJECT" value="directory" />
+      <dir value="$PROJECT_DIR$/src/test/java" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.java in declarative-functional-test" />
+        <item itemvalue="JUnit.JsonTestScenarioParserTest" />
         <item itemvalue="Application.SmartUITestApplication" />
         <item itemvalue="JUnit.TestScenarioParserTest" />
         <item itemvalue="JUnit.TestScenarioParserTest.parse_manyPages_parsesCorrectly" />
-        <item itemvalue="JUnit.TestScenarioParserTest.parse_threeActionTypes_parsesCorrectly" />
-        <item itemvalue="JUnit.TestScenarioParserTest.parse_noExpectedKeyword_parsesWithoutExpected" />
       </list>
     </recent_temporary>
   </component>
