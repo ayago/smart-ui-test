@@ -3,8 +3,6 @@ package com.ayago.smartuitest.engine;
 import com.ayago.smartuitest.testscenario.Action;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  * Engine responsible for orchestrating web actions.
@@ -12,7 +10,6 @@ import org.springframework.stereotype.Component;
  * and an internally managed WebDriverElementResolver to locate elements on the page,
  * which is then passed to the strategies.
  */
-@Component
 public class WebInteractionEngine {
     private final ActionStrategyRegistry strategyRegistry;
     private final ElementResolver elementResolver; // Instance of WebDriverElementResolver
@@ -24,7 +21,6 @@ public class WebInteractionEngine {
      * @param driver The WebDriver instance for browser interaction.
      * @param strategyRegistry The registry that provides action execution strategies.
      */
-    @Autowired
     public WebInteractionEngine(WebDriver driver, ActionStrategyRegistry strategyRegistry) {
         if (driver == null) {
             throw new IllegalArgumentException("WebDriver instance cannot be null for SmartLocatorEngine.");

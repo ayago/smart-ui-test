@@ -5,19 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d1b51daa-cbf5-472c-9bf5-c61a15d66d3e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/engine/WebInteractionEngineFactory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/CacheManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/executor/CacheManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/FeatureManagerClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/executor/FeatureManagerClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/SmartUIRunner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/executor/SmartUITestRunner.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/SmartUITestApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/SmartUITestApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/engine/ActionStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/engine/ActionStrategy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/engine/ActionStrategyRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/engine/ActionStrategyRegistry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/engine/ClickActionStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/engine/ClickActionStrategy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/engine/ElementResolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/engine/ElementResolver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/engine/EnterActionStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/engine/EnterActionStrategy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/engine/SubmitActionStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/engine/SubmitActionStrategy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/engine/WebDriverElementResolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/engine/WebDriverElementResolver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/engine/WebInteractionEngine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/engine/WebInteractionEngine.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

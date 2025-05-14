@@ -2,6 +2,7 @@ package com.ayago.smartuitest.executor;
 
 
 import com.ayago.smartuitest.engine.WebInteractionEngine;
+import com.ayago.smartuitest.engine.WebInteractionEngineFactory;
 import com.ayago.smartuitest.testscenario.Action;
 import com.ayago.smartuitest.testscenario.TestScenario;
 import com.ayago.smartuitest.testscenario.TestScenario.ExpectedElement;
@@ -16,26 +17,26 @@ import org.springframework.stereotype.Component;
 class SmartUITestRunner implements CommandLineRunner{
     private final TestScenarioParser parser;
     private final WebDriver driver;
-    private final WebInteractionEngine interactionEngine;
+    private final WebInteractionEngineFactory webInteractionEngineFactory;
     private final FeatureManagerClient featureManager;
     
     @Autowired
     public SmartUITestRunner(
         TestScenarioParser parser,
         WebDriver driver,
-        WebInteractionEngine interactionEngine,
+        WebInteractionEngineFactory webInteractionEngineFactory,
         FeatureManagerClient featureManager
     ){
         this.parser = parser;
         this.driver = driver;
-        this.interactionEngine = interactionEngine;
+        this.webInteractionEngineFactory = webInteractionEngineFactory;
         this.featureManager = featureManager;
     }
     
     @Override
     public void run(String... args) throws Exception{
         TestScenario definition = parser.parse("dashboard-flow.txt");
-        
+        WebInteractionEngine interactionEngine = webInteractionEngineFactory.create(definition.getHost());
         System.out.println("Target Host: " + definition.getHost());
         featureManager.applyFeatureFlags(definition.getFeatures());
         
