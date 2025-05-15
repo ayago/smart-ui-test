@@ -1,7 +1,6 @@
 package com.ayago.smartuitest.engine;
 
 import com.ayago.smartuitest.testscenario.Action;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -24,7 +23,6 @@ public class ActionStrategyRegistry {
      * Constructs the registry.
      *
      */
-    @Autowired
     ActionStrategyRegistry(Collection<ActionStrategy> strategies) {
         if (strategies.isEmpty()) {
             System.err.println("Warning: No ActionStrategy beans found in the application context. " +

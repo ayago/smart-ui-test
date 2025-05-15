@@ -7,6 +7,7 @@ import com.ayago.smartuitest.testscenario.TestScenario.Feature;
 import com.ayago.smartuitest.testscenario.TestScenario.Page;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import java.util.List;
 import java.util.Map;
@@ -28,7 +29,9 @@ public abstract class TestScenarioMixIns{
     @JsonCreator
     public TestScenarioMixIns(
         @JsonProperty("host") String host,
-        @JsonProperty("features") Map<String, Feature> features,
+        @JsonProperty("features")
+        @JsonDeserialize(using = FeaturesDeserializer.class)
+        Map<String, Feature> features,
         @JsonProperty("pages") List<Page> pages) {
         // This constructor is just for Jackson's benefit to know the mapping.
         // The actual TestScenario constructor will be called.
@@ -60,18 +63,14 @@ public abstract class TestScenarioMixIns{
          *
          * @param enable  Indicates if the feature is enabled.
          * @param context A map of context-specific properties for the feature.
-         * @param name    The name of the feature. This is often the key in the 'features' map
-         *                in the parent TestScenario JSON, but can also be explicitly included
-         *                as a property within the Feature JSON object if desired.
          */
         @JsonCreator
         public FeatureMixIn(
             @JsonProperty("enable") boolean enable,
-            @JsonProperty("context") Map<String, String> context,
-            @JsonProperty("name") String name
-        ){
-            // This constructor is for Jackson's mapping.
-            // The actual TestScenario.Feature constructor will be called.
+            @JsonProperty("context") Map<String, String> context) {
+            // This constructor is for Jackson's mapping of the *value* part of the feature entry.
+            // The actual TestScenario.Feature constructor (which includes 'name')
+            // will be called by our custom map deserializer.
         }
     }
     

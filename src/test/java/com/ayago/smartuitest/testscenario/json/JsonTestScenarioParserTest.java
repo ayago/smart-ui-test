@@ -86,23 +86,24 @@ public class JsonTestScenarioParserTest {
     
     @Test
     void parse_noFeatures_returnsTestScenario() throws IOException {
-        String jsonTestData = "{\n" +
-            "  \"host\": \"https://www.google.com\",\n" +
-            // \"features\": {} is optional if your POJO handles null or if parser defaults to empty
-            "  \"pages\": [\n" +
-            "    {\n" +
-            "      \"name\": \"Page 1\",\n" +
-            "      \"expected\": [\n" +
-            "        { \"target\": \"Search\", \"value\": \"\" }\n" +
-            "      ],\n" +
-            "      \"action\": {\n" +
-            "        \"actionType\": \"Enter\",\n" +
-            "        \"targetField\": \"Search\",\n" +
-            "        \"value\": \"chatgpt\"\n" +
-            "      }\n" +
-            "    }\n" +
-            "  ]\n" +
-            "}";
+        // \"features\": {} is optional if your POJO handles null or if parser defaults to empty
+        String jsonTestData = """
+            {
+              "host": "https://www.google.com",
+              "pages": [
+                {
+                  "name": "Page 1",
+                  "expected": [
+                    { "target": "Search", "value": "" }
+                  ],
+                  "action": {
+                    "actionType": "Enter",
+                    "targetField": "Search",
+                    "value": "chatgpt"
+                  }
+                }
+              ]
+            }""";
         File jsonFile = createTempJsonFile(jsonTestData);
         TestScenario scenario = parser.parse(jsonFile.getAbsolutePath());
         
@@ -118,52 +119,54 @@ public class JsonTestScenarioParserTest {
     
     @Test
     void parse_threeActionTypes_parsesCorrectly() throws IOException {
-        String jsonTestData = "{\n" +
-            "  \"host\": \"https://www.google.com\",\n" +
-            "  \"features\": {\n" +
-            "    \"DUMMY_FEATURE\": {\n" +
-            "      \"name\": \"DUMMY_FEATURE\",\n" + // Name included as per FeatureMixIn
-            "      \"enable\": false,\n" +
-            "      \"context\": {\n" +
-            "        \"province\": \"N/A\",\n" +
-            "        \"store\": \"N/A\"\n" +
-            "      }\n" +
-            "    }\n" +
-            "  },\n" +
-            "  \"pages\": [\n" +
-            "    {\n" +
-            "      \"name\": \"Page 1\",\n" +
-            "      \"expected\": [{ \"target\": \"Search\", \"value\": \"\" }],\n" +
-            "      \"action\": {\n" +
-            "        \"actionType\": \"Enter\",\n" +
-            "        \"targetField\": \"Search\",\n" +
-            "        \"value\": \"chatgpt\"\n" +
-            "      }\n" +
-            "    },\n" +
-            "    {\n" +
-            "      \"name\": \"Page 2\",\n" +
-            "      \"expected\": [\n" +
-            "        { \"target\": \"Result\", \"value\": \"50\" },\n" +
-            "        { \"target\": \"Status\", \"value\": \"Complete\" }\n" +
-            "      ],\n" +
-            "      \"action\": {\n" +
-            "        \"actionType\": \"Click\",\n" +
-            "        \"target\": \"Try chatgpt\"\n" +
-            "      }\n" +
-            "    },\n" +
-            "    {\n" +
-            "      \"name\": \"Page 3\",\n" +
-            "      \"expected\": [{ \"target\": \"Title\", \"value\": \"Sign up\" }],\n" +
-            "      \"action\": {\n" +
-            "        \"actionType\": \"Submit\",\n" +
-            "        \"fields\": {\n" +
-            "          \"Username\": \"ayago\",\n" +
-            "          \"Email\": \"adriancyago@gmail.com\"\n" +
-            "        }\n" +
-            "      }\n" +
-            "    }\n" +
-            "  ]\n" +
-            "}";
+        // Name included as per FeatureMixIn
+        String jsonTestData = """
+            {
+              "host": "https://www.google.com",
+              "features": {
+                "DUMMY_FEATURE": {
+                  "name": "DUMMY_FEATURE",
+                  "enable": false,
+                  "context": {
+                    "province": "N/A",
+                    "store": "N/A"
+                  }
+                }
+              },
+              "pages": [
+                {
+                  "name": "Page 1",
+                  "expected": [{ "target": "Search", "value": "" }],
+                  "action": {
+                    "actionType": "Enter",
+                    "targetField": "Search",
+                    "value": "chatgpt"
+                  }
+                },
+                {
+                  "name": "Page 2",
+                  "expected": [
+                    { "target": "Result", "value": "50" },
+                    { "target": "Status", "value": "Complete" }
+                  ],
+                  "action": {
+                    "actionType": "Click",
+                    "target": "Try chatgpt"
+                  }
+                },
+                {
+                  "name": "Page 3",
+                  "expected": [{ "target": "Title", "value": "Sign up" }],
+                  "action": {
+                    "actionType": "Submit",
+                    "fields": {
+                      "Username": "ayago",
+                      "Email": "adriancyago@gmail.com"
+                    }
+                  }
+                }
+              ]
+            }""";
         File jsonFile = createTempJsonFile(jsonTestData);
         TestScenario scenario = parser.parse(jsonFile.getAbsolutePath());
         
@@ -221,21 +224,23 @@ public class JsonTestScenarioParserTest {
     
     @Test
     void parse_noExpectedItems_parsesCorrectly() throws IOException {
-        String jsonTestData = "{\n" +
-            "  \"host\": \"https://www.google.com\",\n" +
-            "  \"features\": {},\n" +
-            "  \"pages\": [\n" +
-            "    {\n" +
-            "      \"name\": \"Page 1\",\n" +
-            "      \"expected\": [],\n" + // Empty expected array
-            "      \"action\": {\n" +
-            "        \"actionType\": \"Enter\",\n" +
-            "        \"targetField\": \"Search\",\n" +
-            "        \"value\": \"chatgpt\"\n" +
-            "      }\n" +
-            "    }\n" +
-            "  ]\n" +
-            "}";
+        // Empty expected array
+        String jsonTestData = """
+            {
+              "host": "https://www.google.com",
+              "features": {},
+              "pages": [
+                {
+                  "name": "Page 1",
+                  "expected": [],
+                  "action": {
+                    "actionType": "Enter",
+                    "targetField": "Search",
+                    "value": "chatgpt"
+                  }
+                }
+              ]
+            }""";
         File jsonFile = createTempJsonFile(jsonTestData);
         TestScenario scenario = parser.parse(jsonFile.getAbsolutePath());
         
@@ -246,21 +251,22 @@ public class JsonTestScenarioParserTest {
     @Test
     void parse_missingExpectedField_parsesAsEmptyOrNull() throws IOException {
         // Test behavior when "expected" key is entirely missing from a page object
-        String jsonTestData = "{\n" +
-            "  \"host\": \"https://www.google.com\",\n" +
-            "  \"features\": {},\n" +
-            "  \"pages\": [\n" +
-            "    {\n" +
-            "      \"name\": \"Page 1\",\n" +
-            // "expected" key is missing
-            "      \"action\": {\n" +
-            "        \"actionType\": \"Enter\",\n" +
-            "        \"targetField\": \"Search\",\n" +
-            "        \"value\": \"chatgpt\"\n" +
-            "      }\n" +
-            "    }\n" +
-            "  ]\n" +
-            "}";
+        // "expected" key is missing
+        String jsonTestData = """
+            {
+              "host": "https://www.google.com",
+              "features": {},
+              "pages": [
+                {
+                  "name": "Page 1",
+                  "action": {
+                    "actionType": "Enter",
+                    "targetField": "Search",
+                    "value": "chatgpt"
+                  }
+                }
+              ]
+            }""";
         File jsonFile = createTempJsonFile(jsonTestData);
         TestScenario scenario = parser.parse(jsonFile.getAbsolutePath());
         
@@ -278,11 +284,13 @@ public class JsonTestScenarioParserTest {
     
     @Test
     void parse_invalidJsonSyntax_throwsIOException() throws IOException {
-        String jsonTestData = "{\n" +
-            "  \"host\": \"https://www.google.com\",\n" +
-            "  \"features\": {},,\n" + // Extra comma, invalid JSON
-            "  \"pages\": []\n" +
-            "}";
+        // Extra comma, invalid JSON
+        String jsonTestData = """
+            {
+              "host": "https://www.google.com",
+              "features": {},,
+              "pages": []
+            }""";
         File jsonFile = createTempJsonFile(jsonTestData);
         
         // Expecting a Jackson-specific exception, often a JsonProcessingException (subclass of IOException)
@@ -315,7 +323,8 @@ public class JsonTestScenarioParserTest {
     
     @Test
     void parse_jsonFileOnlyHost_parsesCorrectly() throws IOException {
-        String jsonTestData = "{ \"host\": \"https://www.example.com\" }";
+        String jsonTestData = """
+            { "host": "https://www.example.com" }""";
         // pages and features are optional in this JSON, POJO should handle null/empty
         File jsonFile = createTempJsonFile(jsonTestData);
         TestScenario scenario = parser.parse(jsonFile.getAbsolutePath());
@@ -340,7 +349,8 @@ public class JsonTestScenarioParserTest {
             // For this test, assuming the JSON would provide an empty list if no pages.
             // Let's adjust JSON to be more explicit for this test case for clarity.
             
-            String explicitJson = "{ \"host\": \"https://www.example.com\", \"features\": {}, \"pages\": [] }";
+            String explicitJson = """
+                { "host": "https://www.example.com", "features": {}, "pages": [] }""";
             jsonFile = createTempJsonFile(explicitJson);
             scenario = parser.parse(jsonFile.getAbsolutePath());
             assertNotNull(scenario.getPages());

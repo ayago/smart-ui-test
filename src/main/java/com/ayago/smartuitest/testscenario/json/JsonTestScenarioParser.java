@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,6 +22,7 @@ import java.nio.file.Paths;
  * The primary public parsing method is parseJsonFile(String jsonFileName).
  */
 @Component
+@Validated
 public class JsonTestScenarioParser {
     
     private final ObjectMapper objectMapper;

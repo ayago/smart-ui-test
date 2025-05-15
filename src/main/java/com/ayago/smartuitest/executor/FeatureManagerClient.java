@@ -2,7 +2,6 @@ package com.ayago.smartuitest.executor;
 
 import com.ayago.smartuitest.testscenario.TestScenario;
 import com.ayago.smartuitest.testscenario.TestScenario.Feature;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -11,7 +10,6 @@ import java.util.Map;
 class FeatureManagerClient {
     private final CacheManager cacheManager;
     
-    @Autowired
     public FeatureManagerClient(CacheManager cacheManager){
         this.cacheManager = cacheManager;
     }

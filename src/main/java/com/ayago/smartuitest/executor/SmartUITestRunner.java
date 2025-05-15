@@ -7,22 +7,20 @@ import com.ayago.smartuitest.testscenario.Action;
 import com.ayago.smartuitest.testscenario.TestScenario;
 import com.ayago.smartuitest.testscenario.TestScenario.ExpectedElement;
 import com.ayago.smartuitest.testscenario.TestScenario.Page;
-import com.ayago.smartuitest.testscenario.parser.TestScenarioParser;
+import com.ayago.smartuitest.testscenario.json.JsonTestScenarioParser;
 import org.openqa.selenium.WebDriver;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 @Component
 class SmartUITestRunner implements CommandLineRunner{
-    private final TestScenarioParser parser;
+    private final JsonTestScenarioParser parser;
     private final WebDriver driver;
     private final WebInteractionEngineFactory webInteractionEngineFactory;
     private final FeatureManagerClient featureManager;
     
-    @Autowired
     public SmartUITestRunner(
-        TestScenarioParser parser,
+        JsonTestScenarioParser parser,
         WebDriver driver,
         WebInteractionEngineFactory webInteractionEngineFactory,
         FeatureManagerClient featureManager
@@ -35,7 +33,7 @@ class SmartUITestRunner implements CommandLineRunner{
     
     @Override
     public void run(String... args) throws Exception{
-        TestScenario definition = parser.parse("dashboard-flow.txt");
+        TestScenario definition = parser.parse("dashboard-flow.json");
         WebInteractionEngine interactionEngine = webInteractionEngineFactory.create(definition.getHost());
         System.out.println("Target Host: " + definition.getHost());
         featureManager.applyFeatureFlags(definition.getFeatures());

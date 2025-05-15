@@ -1,0 +1,28 @@
+{
+  "host": "https://www.google.com",
+  "features": {
+    "DUMMY_FEATURE": {
+      "enable": false,
+      "context": {
+        "province": "N/A",
+        "store": "N/A"
+      }
+    }
+  },
+  "pages": [
+    {
+      "name": "Page 1",
+      "expected": [
+        {
+          "target": "Search",
+          "value": ""
+        }
+      ],
+      "action": {
+        "actionType": "Enter",
+        "targetField": "Search",
+        "value": "chatgpt"
+      }
+    }
+  ]
+}

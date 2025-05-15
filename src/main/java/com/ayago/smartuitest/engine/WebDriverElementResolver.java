@@ -4,7 +4,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Implements the ElementResolver interface using WebDriver to find elements
@@ -18,7 +17,6 @@ class WebDriverElementResolver implements ElementResolver {
      * Constructs the WebDriverElementResolver.
      * @param driver The WebDriver instance for browser interaction.
      */
-    @Autowired
     WebDriverElementResolver(WebDriver driver) {
         this.driver = driver;
     }
