@@ -11,7 +11,7 @@ import org.openqa.selenium.WebElement;
  * which is then passed to the strategies.
  */
 public class WebInteractionEngine {
-    private final ActionStrategyRegistry strategyRegistry;
+    private final ActionStrategyRegistry actionStrategyRegistry;
     private final ElementResolver elementResolver; // Instance of WebDriverElementResolver
     
     /**
@@ -19,18 +19,16 @@ public class WebInteractionEngine {
      * It initializes its own WebDriverElementResolver instance.
      *
      * @param driver The WebDriver instance for browser interaction.
-     * @param strategyRegistry The registry that provides action execution strategies.
+     * @param actionStrategyRegistry The registry that provides action execution strategies.
      */
-    public WebInteractionEngine(WebDriver driver, ActionStrategyRegistry strategyRegistry) {
+    public WebInteractionEngine(WebDriver driver, ActionStrategyRegistry actionStrategyRegistry) {
         if (driver == null) {
             throw new IllegalArgumentException("WebDriver instance cannot be null for SmartLocatorEngine.");
         }
-        if (strategyRegistry == null) {
+        if (actionStrategyRegistry == null) {
             throw new IllegalArgumentException("ActionStrategyRegistry cannot be null for SmartLocatorEngine.");
         }
-        this.strategyRegistry = strategyRegistry;
-        // Instantiate WebDriverElementResolver directly, passing the WebDriver instance.
-        // This elementResolver will be used by the strategies.
+        this.actionStrategyRegistry = actionStrategyRegistry;
         this.elementResolver = new WebDriverElementResolver(driver);
     }
     
@@ -47,17 +45,12 @@ public class WebInteractionEngine {
         if (action == null) {
             throw new IllegalArgumentException("Action to perform cannot be null.");
         }
-        System.out.println("SmartLocatorEngine: Attempting to perform action: " + action.toString());
+        System.out.println("SmartLocatorEngine: Attempting to perform action: " + action);
         
-        // Retrieve the appropriate strategy based on the action's concrete type
-        ActionStrategy strategy = strategyRegistry.getStrategy(action);
-        
-        // Execute the action using the chosen strategy.
-        // Pass the WebDriver and the internally managed ElementResolver instance.
-        // The strategy will use this elementResolver to call resolveField.
+        ActionStrategy strategy = actionStrategyRegistry.getStrategy(action);
         strategy.execute(action, this.elementResolver);
         
-        System.out.println("SmartLocatorEngine: Action performed successfully: " + action.toString());
+        System.out.println("SmartLocatorEngine: Action performed successfully: " + action);
     }
     
     public String getFieldValue(String fieldName){

@@ -64,7 +64,6 @@ class ClickActionStrategy implements ActionStrategy {
             }
         }
         
-        // Perform the click action.
         try {
             elementToClick.click();
             System.out.println("Successfully executed ClickAction on target: " + target);

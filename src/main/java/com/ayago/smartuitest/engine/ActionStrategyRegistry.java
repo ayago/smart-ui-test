@@ -28,15 +28,8 @@ public class ActionStrategyRegistry {
             System.err.println("Warning: No ActionStrategy beans found in the application context. " +
                 "Action execution will likely fail. Ensure strategies are annotated with @Component " +
                 "and component scanning is configured for the 'com.ayago.action' package.");
-            // Initialize with an empty map to prevent NullPointerExceptions later,
-            // though getStrategy will still fail to find strategies.
             strategyMap = new HashMap<>();
-            // Depending on requirements, you might throw an IllegalStateException here:
-            // throw new IllegalStateException("No ActionStrategy beans found. Ensure strategies are correctly configured as Spring beans.");
         } else {
-            // Create a map from the action type class to the strategy instance.
-            // Uses a merge function to handle potential duplicate strategy registrations for the same Action type,
-            // though ideally, each Action type should have only one strategy.
             strategyMap = strategies.stream()
                 .collect(Collectors.toMap(ActionStrategy::getActionType, Function.identity(),
                     (existing, replacement) -> {
@@ -44,7 +37,7 @@ public class ActionStrategyRegistry {
                             existing.getActionType().getName() +
                             ". Using existing strategy: " + existing.getClass().getName() +
                             ", ignoring duplicate: " + replacement.getClass().getName());
-                        return existing; // Keep the existing strategy in case of duplicates
+                        return existing;
                     }
                 ));
             System.out.println("Initialized ActionStrategyRegistry with strategies for action types: " + strategyMap.keySet());
@@ -63,11 +56,7 @@ public class ActionStrategyRegistry {
         if (action == null) {
             throw new IllegalArgumentException("Action cannot be null when retrieving a strategy.");
         }
-        // Check if strategyMap is initialized, which happens in @PostConstruct
-        if (strategyMap == null) {
-            throw new IllegalStateException("ActionStrategyRegistry's strategyMap is not initialized. " +
-                "This might indicate an issue with Spring bean lifecycle or configuration.");
-        }
+
         if (strategyMap.isEmpty()) {
             System.err.println("ActionStrategyRegistry has no strategies loaded. Cannot find strategy for: " + action.getClass().getName());
             throw new IllegalStateException("ActionStrategyRegistry contains no strategies. Check Spring component scanning and strategy bean definitions.");

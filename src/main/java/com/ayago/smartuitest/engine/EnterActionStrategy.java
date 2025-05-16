@@ -32,7 +32,6 @@ class EnterActionStrategy implements ActionStrategy {
         // Resolve the field using the provided ElementResolver.
         WebElement field = resolver.resolveField(targetField);
         
-        // Perform the enter action.
         try {
             field.clear(); // It's good practice to clear the field before sending new keys.
             field.sendKeys(value);

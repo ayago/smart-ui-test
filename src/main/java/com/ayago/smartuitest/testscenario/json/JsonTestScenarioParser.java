@@ -32,7 +32,6 @@ public class JsonTestScenarioParser {
         
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         
-        // Register MixIns for POJOs that have constructors Jackson needs to use
         objectMapper.addMixIn(TestScenario.class, TestScenarioMixIns.class);
         objectMapper.addMixIn(TestScenario.Feature.class, TestScenarioMixIns.FeatureMixIn.class);
         objectMapper.addMixIn(TestScenario.Page.class, TestScenarioMixIns.PageMixIn.class);
@@ -42,7 +41,6 @@ public class JsonTestScenarioParser {
         objectMapper.addMixIn(EnterAction.class, ActionMixIns.EnterActionMixIn.class);
         objectMapper.addMixIn(SubmitAction.class, ActionMixIns.SubmitActionMixIn.class);
         
-        // Create and register a module for the custom Action deserializer
         SimpleModule actionModule = new SimpleModule("ActionDeserializerModule");
         actionModule.addDeserializer(Action.class, new ActionDeserializer());
         objectMapper.registerModule(actionModule);
@@ -62,7 +60,6 @@ public class JsonTestScenarioParser {
             throw new IllegalArgumentException("JSON filename cannot be null or empty.");
         }
         File jsonFile = Paths.get(jsonFileName).toFile();
-        // Delegates to a private helper method that takes a File object
         return parseJsonFileInternal(jsonFile);
     }
     

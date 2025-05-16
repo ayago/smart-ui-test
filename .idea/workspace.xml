@@ -4,18 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d1b51daa-cbf5-472c-9bf5-c61a15d66d3e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/testscenario/json/FeaturesDeserializer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/dashboard-flow.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/engine/ActionStrategyRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/engine/ActionStrategyRegistry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/engine/WebDriverElementResolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/engine/WebDriverElementResolver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/executor/FeatureManagerClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/executor/FeatureManagerClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/executor/SmartUITestRunner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/executor/SmartUITestRunner.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/testscenario/json/JsonTestScenarioParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/testscenario/json/JsonTestScenarioParser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/testscenario/json/TestScenarioMixIns.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/testscenario/json/TestScenarioMixIns.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/ayago/smartuitest/testscenario/json/JsonTestScenarioParserTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/ayago/smartuitest/testscenario/json/JsonTestScenarioParserTest.java" afterDir="false" />
-    </list>
+    <list default="true" id="d1b51daa-cbf5-472c-9bf5-c61a15d66d3e" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
