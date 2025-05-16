@@ -32,12 +32,10 @@ public class JsonTestScenarioParserTest {
     private JsonTestScenarioParser parser;
     
     @TempDir
-    Path tempDir; // JUnit 5 temporary directory for test files
+    Path tempDir;
     
     @BeforeEach
     void setUp() {
-        // Instantiate the parser directly.
-        // If JsonTestScenarioParser had dependencies to be mocked, use @InjectMocks and @Mock
         parser = new JsonTestScenarioParser();
     }
     
@@ -68,7 +66,7 @@ public class JsonTestScenarioParserTest {
               ]
             }""";
         File jsonFile = createTempJsonFile(jsonTestData);
-        TestScenario scenario = parser.parse(jsonFile.getAbsolutePath());
+        TestScenario scenario = parser.parse(jsonFile);
         
         assertNotNull(scenario);
         assertEquals("https://www.google.com", scenario.getHost());
@@ -105,7 +103,7 @@ public class JsonTestScenarioParserTest {
               ]
             }""";
         File jsonFile = createTempJsonFile(jsonTestData);
-        TestScenario scenario = parser.parse(jsonFile.getAbsolutePath());
+        TestScenario scenario = parser.parse(jsonFile);
         
         assertNotNull(scenario);
         assertEquals("https://www.google.com", scenario.getHost());
@@ -168,7 +166,7 @@ public class JsonTestScenarioParserTest {
               ]
             }""";
         File jsonFile = createTempJsonFile(jsonTestData);
-        TestScenario scenario = parser.parse(jsonFile.getAbsolutePath());
+        TestScenario scenario = parser.parse(jsonFile);
         
         assertNotNull(scenario);
         assertThat(scenario.getFeatures(), hasKey("DUMMY_FEATURE"));
@@ -211,7 +209,7 @@ public class JsonTestScenarioParserTest {
             "  \"pages\": [\n" + pagesJson.toString() + "\n  ]\n" +
             "}";
         File jsonFile = createTempJsonFile(jsonTestData);
-        TestScenario scenario = parser.parse(jsonFile.getAbsolutePath());
+        TestScenario scenario = parser.parse(jsonFile);
         
         assertNotNull(scenario);
         assertThat(scenario.getPages(), hasSize(12));
@@ -242,7 +240,7 @@ public class JsonTestScenarioParserTest {
               ]
             }""";
         File jsonFile = createTempJsonFile(jsonTestData);
-        TestScenario scenario = parser.parse(jsonFile.getAbsolutePath());
+        TestScenario scenario = parser.parse(jsonFile);
         
         assertNotNull(scenario);
         assertThat(scenario.getPages().getFirst().getExpected(), hasSize(0));
@@ -268,7 +266,7 @@ public class JsonTestScenarioParserTest {
               ]
             }""";
         File jsonFile = createTempJsonFile(jsonTestData);
-        TestScenario scenario = parser.parse(jsonFile.getAbsolutePath());
+        TestScenario scenario = parser.parse(jsonFile);
         
         assertNotNull(scenario);
         TestScenario.Page page1 = scenario.getPages().getFirst();
@@ -295,7 +293,7 @@ public class JsonTestScenarioParserTest {
         
         // Expecting a Jackson-specific exception, often a JsonProcessingException (subclass of IOException)
         IOException exception = assertThrows(IOException.class, () -> {
-            parser.parse(jsonFile.getAbsolutePath());
+            parser.parse(jsonFile);
         });
         // You can add more specific checks for the exception message if needed
         assertTrue(exception.getMessage().contains("Unexpected character"));
@@ -309,7 +307,7 @@ public class JsonTestScenarioParserTest {
         // Jackson might throw an EOFException or similar if the content is empty
         // or if it's not a valid JSON structure (e.g. missing "host")
         IOException exception = assertThrows(IOException.class, () -> {
-            parser.parse(jsonFile.getAbsolutePath());
+            parser.parse(jsonFile);
         });
         // The exact message depends on how Jackson handles empty input and subsequent validation
         // It might be "No content to map due to end-of-input" or related to missing mandatory fields
@@ -327,7 +325,7 @@ public class JsonTestScenarioParserTest {
             { "host": "https://www.example.com" }""";
         // pages and features are optional in this JSON, POJO should handle null/empty
         File jsonFile = createTempJsonFile(jsonTestData);
-        TestScenario scenario = parser.parse(jsonFile.getAbsolutePath());
+        TestScenario scenario = parser.parse(jsonFile);
         
         assertNotNull(scenario);
         assertEquals("https://www.example.com", scenario.getHost());
@@ -352,7 +350,7 @@ public class JsonTestScenarioParserTest {
             String explicitJson = """
                 { "host": "https://www.example.com", "features": {}, "pages": [] }""";
             jsonFile = createTempJsonFile(explicitJson);
-            scenario = parser.parse(jsonFile.getAbsolutePath());
+            scenario = parser.parse(jsonFile);
             assertNotNull(scenario.getPages());
             assertThat(scenario.getPages(), hasSize(0));
             assertNotNull(scenario.getFeatures());

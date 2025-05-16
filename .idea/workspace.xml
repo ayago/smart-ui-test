@@ -4,7 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d1b51daa-cbf5-472c-9bf5-c61a15d66d3e" name="Changes" comment="" />
+    <list default="true" id="d1b51daa-cbf5-472c-9bf5-c61a15d66d3e" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/engine/EnterActionStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/engine/EnterActionStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/executor/SmartUITestRunner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/executor/SmartUITestRunner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/testscenario/json/JsonTestScenarioParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/testscenario/json/JsonTestScenarioParser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/dashboard-flow.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/dashboard-flow.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/ayago/smartuitest/testscenario/json/JsonTestScenarioParserTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/ayago/smartuitest/testscenario/json/JsonTestScenarioParserTest.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -32,7 +39,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Application.SmartUITestApplication.executor": "Run",
+    "Application.SmartUITestApplication.executor": "Debug",
     "JUnit.JsonTestScenarioParserTest.executor": "Run",
     "JUnit.TestScenarioParserTest.executor": "Run",
     "JUnit.TestScenarioParserTest.parse_featuresAfterHost_parsesCorrectly.executor": "Debug",
@@ -68,10 +75,11 @@
       <recent name="com.ayago.testscenario" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.java in declarative-functional-test">
+  <component name="RunManager" selected="Application.SmartUITestApplication">
     <configuration name="SmartUITestApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.ayago.smartuitest.SmartUITestApplication" />
       <module name="declarative-functional-test" />
+      <option name="PROGRAM_PARAMETERS" value="$PROJECT_DIR$/src/main/resources" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="com.ayago.smartuitest.executor.*" />
@@ -136,12 +144,19 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Application.SmartUITestApplication" />
+      <item itemvalue="JUnit.java in declarative-functional-test" />
+      <item itemvalue="JUnit.JsonTestScenarioParserTest" />
+      <item itemvalue="JUnit.TestScenarioParserTest" />
+      <item itemvalue="JUnit.TestScenarioParserTest.parse_manyPages_parsesCorrectly" />
+    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.java in declarative-functional-test" />
-        <item itemvalue="JUnit.JsonTestScenarioParserTest" />
-        <item itemvalue="JUnit.TestScenarioParserTest" />
         <item itemvalue="Application.SmartUITestApplication" />
+        <item itemvalue="JUnit.JsonTestScenarioParserTest" />
+        <item itemvalue="JUnit.java in declarative-functional-test" />
+        <item itemvalue="JUnit.TestScenarioParserTest" />
         <item itemvalue="JUnit.TestScenarioParserTest.parse_manyPages_parsesCorrectly" />
       </list>
     </recent_temporary>
@@ -177,11 +192,6 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/test/java/com/ayago/testscenario/parser/TestScenarioParserTest.java</url>
-          <line>237</line>
-          <option name="timeStamp" value="46" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/testscenario/parser/TestScenarioParser.java</url>
           <line>89</line>
           <option name="timeStamp" value="47" />
@@ -197,11 +207,6 @@
           <option name="timeStamp" value="64" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/test/java/com/ayago/testscenario/parser/TestScenarioParserTest.java</url>
-          <line>132</line>
-          <option name="timeStamp" value="75" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/testscenario/parser/TestScenarioParser.java</url>
           <line>159</line>
           <option name="timeStamp" value="78" />
@@ -212,9 +217,9 @@
           <option name="timeStamp" value="80" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/test/java/com/ayago/testscenario/parser/TestScenarioParserTest.java</url>
-          <line>159</line>
-          <option name="timeStamp" value="83" />
+          <url>file://$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/executor/SmartUITestRunner.java</url>
+          <line>70</line>
+          <option name="timeStamp" value="84" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

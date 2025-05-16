@@ -1,5 +1,5 @@
 {
-  "host": "https://www.google.com",
+  "host": "https://www.feu.edu.ph/",
   "features": {
     "DUMMY_FEATURE": {
       "enable": false,
@@ -11,17 +11,25 @@
   },
   "pages": [
     {
-      "name": "Page 1",
-      "expected": [
-        {
-          "target": "Search",
-          "value": ""
-        }
-      ],
+      "name": "Cookie Policy",
+      "action": {
+        "actionType": "Click",
+        "target": "I Agree"
+      }
+    },
+    {
+      "name": "Main Page",
+      "action": {
+        "actionType": "Click",
+        "target": "Message us via the Tamaraw Easy Assist Hub"
+      }
+    },
+    {
+      "name": "Tamaraw Easy Assist Hub",
       "action": {
         "actionType": "Enter",
-        "targetField": "Search",
-        "value": "chatgpt"
+        "targetField": "Enter your search term here...",
+        "value": "Student"
       }
     }
   ]

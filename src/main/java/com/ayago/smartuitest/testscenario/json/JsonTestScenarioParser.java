@@ -13,7 +13,6 @@ import org.springframework.validation.annotation.Validated;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
 
 /**
  * Parses a TestScenario from a JSON source using Jackson.
@@ -50,16 +49,12 @@ public class JsonTestScenarioParser {
      * Parses a TestScenario from a JSON file, given its filename/path.
      * This is the sole public method for parsing TestScenario objects from a file.
      *
-     * @param jsonFileName The name or path of the JSON file.
+     * @param jsonFile The name or path of the JSON file.
      * @return The parsed TestScenario object.
-     * @throws IOException If there's an error reading the file or during JSON parsing/mapping.
+     * @throws IOException              If there's an error reading the file or during JSON parsing/mapping.
      * @throws IllegalArgumentException if jsonFileName is null or empty.
      */
-    public TestScenario parse(String jsonFileName) throws IOException {
-        if (jsonFileName == null || jsonFileName.trim().isEmpty()) {
-            throw new IllegalArgumentException("JSON filename cannot be null or empty.");
-        }
-        File jsonFile = Paths.get(jsonFileName).toFile();
+    public TestScenario parse(File jsonFile) throws IOException {
         return parseJsonFileInternal(jsonFile);
     }
     
