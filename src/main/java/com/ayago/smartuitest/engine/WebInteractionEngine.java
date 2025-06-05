@@ -10,7 +10,7 @@ import org.openqa.selenium.WebElement;
  * and an internally managed WebDriverElementResolver to locate elements on the page,
  * which is then passed to the strategies.
  */
-public class WebInteractionEngine {
+public class WebInteractionEngine{
     private final ActionStrategyRegistry actionStrategyRegistry;
     private final ElementResolver elementResolver; // Instance of WebDriverElementResolver
     

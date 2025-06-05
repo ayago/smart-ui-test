@@ -26,7 +26,6 @@ class EnterActionStrategy implements ActionStrategy {
      *
      * @param action   The action details, expected to be an instance of EnterAction.
      * @param resolver The ElementResolver to find the target web element.
-     * @param driver   The WebDriver instance to use for waiting. This parameter
      * must be added to the ActionStrategy interface and passed
      * by the calling code (e.g., WebInteractionEngine).
      * @throws IllegalArgumentException if the action is not an EnterAction, or if targetField/value are invalid.
@@ -48,7 +47,7 @@ class EnterActionStrategy implements ActionStrategy {
         
         // Add explicit wait for the element to be clickable (visible and enabled)
         // Adjust the timeout (10 seconds here) based on your application's performance.
-        WebDriverWait wait = new WebDriverWait(resolver.underlyingDriver(), Duration.ofSeconds(2));
+        WebDriverWait wait = new WebDriverWait(resolver.underlyingDriver(), Duration.ofSeconds(15));
         
         try {
             // Wait until the element is visible and enabled so we can interact.

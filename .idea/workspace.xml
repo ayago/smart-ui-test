@@ -6,11 +6,13 @@
   <component name="ChangeListManager">
     <list default="true" id="d1b51daa-cbf5-472c-9bf5-c61a15d66d3e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/SmartUITestApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/SmartUITestApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/engine/ClickActionStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/engine/ClickActionStrategy.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/engine/EnterActionStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/engine/EnterActionStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/engine/WebInteractionEngine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/engine/WebInteractionEngine.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/engine/WebInteractionEngineFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/engine/WebInteractionEngineFactory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/executor/SmartUITestRunner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/executor/SmartUITestRunner.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/testscenario/json/JsonTestScenarioParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/testscenario/json/JsonTestScenarioParser.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/dashboard-flow.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/dashboard-flow.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/ayago/smartuitest/testscenario/json/JsonTestScenarioParserTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/ayago/smartuitest/testscenario/json/JsonTestScenarioParserTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,7 +41,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Application.SmartUITestApplication.executor": "Debug",
+    "Application.SmartUITestApplication.executor": "Run",
     "JUnit.JsonTestScenarioParserTest.executor": "Run",
     "JUnit.TestScenarioParserTest.executor": "Run",
     "JUnit.TestScenarioParserTest.parse_featuresAfterHost_parsesCorrectly.executor": "Debug",
@@ -215,11 +217,6 @@
           <url>file://$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/testscenario/parser/TestScenarioParser.java</url>
           <line>157</line>
           <option name="timeStamp" value="80" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/executor/SmartUITestRunner.java</url>
-          <line>70</line>
-          <option name="timeStamp" value="84" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

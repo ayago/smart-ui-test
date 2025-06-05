@@ -1,5 +1,5 @@
 {
-  "host": "https://www.feu.edu.ph/",
+  "host": "https://votepilipinas.com/",
   "features": {
     "DUMMY_FEATURE": {
       "enable": false,
@@ -11,25 +11,19 @@
   },
   "pages": [
     {
-      "name": "Cookie Policy",
-      "action": {
-        "actionType": "Click",
-        "target": "I Agree"
-      }
-    },
-    {
       "name": "Main Page",
       "action": {
         "actionType": "Click",
-        "target": "Message us via the Tamaraw Easy Assist Hub"
+        "target": "SUPPORT US"
       }
     },
     {
-      "name": "Tamaraw Easy Assist Hub",
+      "name": "Support Us Page",
       "action": {
-        "actionType": "Enter",
-        "targetField": "Enter your search term here...",
-        "value": "Student"
+        "actionType": "Submit",
+        "fields": {
+          "Type your message here": "This is a sample comment"
+        }
       }
     }
   ]

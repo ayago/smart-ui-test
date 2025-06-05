@@ -3,8 +3,11 @@ package com.ayago.smartuitest.engine;
 import com.ayago.smartuitest.testscenario.Action;
 import com.ayago.smartuitest.testscenario.ClickAction;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.springframework.stereotype.Component;
 
 /**
@@ -65,8 +68,11 @@ class ClickActionStrategy implements ActionStrategy {
         }
         
         try {
-            elementToClick.click();
-            System.out.println("Successfully executed ClickAction on target: " + target);
+            System.out.println("Attempting click on target: '" + target + "'");
+            Actions actions = new Actions(resolver.underlyingDriver());
+            actions.scrollToElement(elementToClick).click(elementToClick).build().perform();
+            System.out.println("Successfully executed ClickAction on target: '" + target + "' (click)");
+            
         } catch (Exception e) {
             // Catch broader exceptions during click (e.g., ElementNotInteractableException)
             throw new RuntimeException("Failed to click on target: '" + target + "'. Element found but click failed. Error: " + e.getMessage(), e);
