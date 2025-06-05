@@ -6,13 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="d1b51daa-cbf5-472c-9bf5-c61a15d66d3e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/SmartUITestApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/SmartUITestApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/engine/ClickActionStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/engine/ClickActionStrategy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/engine/EnterActionStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/engine/EnterActionStrategy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/engine/WebInteractionEngine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/engine/WebInteractionEngine.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/engine/WebInteractionEngineFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/engine/WebInteractionEngineFactory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/executor/SmartUITestRunner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/executor/SmartUITestRunner.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/dashboard-flow.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/dashboard-flow.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,6 +76,7 @@
       <option name="MAIN_CLASS_NAME" value="com.ayago.smartuitest.SmartUITestApplication" />
       <module name="declarative-functional-test" />
       <option name="PROGRAM_PARAMETERS" value="$PROJECT_DIR$/src/main/resources" />
+      <option name="VM_PARAMETERS" value="-Dscreenshot.folder=&quot;$PROJECT_DIR$/../../screenshots&quot; " />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="com.ayago.smartuitest.executor.*" />

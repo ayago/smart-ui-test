@@ -9,13 +9,20 @@ import com.ayago.smartuitest.testscenario.TestScenario.Page;
 import com.ayago.smartuitest.testscenario.json.JsonTestScenarioParser;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.io.FileHandler;
+import org.springframework.beans.factory.annotation.Value; // Added import for @Value
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import static java.nio.file.Files.walk;
@@ -25,6 +32,10 @@ class SmartUITestRunner implements CommandLineRunner {
     private final JsonTestScenarioParser parser;
     private final WebInteractionEngineFactory webInteractionEngineFactory;
     private final FeatureManagerClient featureManager; // Assuming FeatureManagerClient exists
+    
+    // Inject the screenshot folder from application.yaml using @Value
+    @Value("${screenshot.folder}")
+    private String screenshotsBaseDir;
     
     public SmartUITestRunner(
         JsonTestScenarioParser parser,
@@ -38,10 +49,11 @@ class SmartUITestRunner implements CommandLineRunner {
     
     @Override
     public void run(String... args) throws Exception {
+        System.out.println("Screenshots will be saved to: " + new File(screenshotsBaseDir).getAbsolutePath());
+        
         String directoryPath = getDirectoryPath(args);
         if (directoryPath == null) return; // Exit if path is invalid
         
-        // Wrap the main execution logic in a try-finally block
         try {
             if (args.length == 0) {
                 System.out.println("Please provide the directory path containing JSON test scenario files as an argument.");
@@ -59,20 +71,22 @@ class SmartUITestRunner implements CommandLineRunner {
                 return; // Exit if no JSON files are found
             }
             
-            
             for (File jsonFile : jsonFiles) {
                 System.out.println("Running test scenario from file: " + jsonFile.getAbsolutePath());
                 runTestScenario(jsonFile); // Delegate to the private method
             }
             
         } catch (Exception e) {
-            // Catch any exceptions that might occur outside the runTestScenario method
             System.err.println("An error occurred during test execution: " + e.getMessage());
-            throw e; // Re-throw the exception if you want the application to indicate failure
+            throw e;
         }
     }
     
     private String getDirectoryPath(String[] args){
+        if (args.length == 0) {
+            System.out.println("No directory path argument provided.");
+            return null;
+        }
         String directoryPath = args[0];
         File directory = new File(directoryPath);
         
@@ -97,7 +111,11 @@ class SmartUITestRunner implements CommandLineRunner {
             System.out.println("Target Host: " + definition.getHost());
             featureManager.applyFeatureFlags(definition.getFeatures()); // Assuming applyFeatureFlags exists
             
+            int pageCounter = 0; // To keep track of page numbers for screenshot naming
             for (Page page : definition.getPages()) {
+                pageCounter++;
+                // Use the injected screenshotsBaseDir
+                takeScreenshot(webDriver, page.getName(), pageCounter, screenshotsBaseDir);
                 
                 for (ExpectedElement expected : page.getExpected()) {
                     String actualValue = interactionEngine.getFieldValue(expected.getTarget());
@@ -109,19 +127,59 @@ class SmartUITestRunner implements CommandLineRunner {
                 }
                 
                 Action action = page.getAction();
-                // Assuming performAction in WebInteractionEngine now accepts WebDriver
-                // as discussed in the previous turn for EnterActionStrategy
                 interactionEngine.performAction(action);
             }
             
         } catch (Exception e) {
-            // Catch and report errors for individual test scenario files
             System.err.println("Error running test scenario from file " + jsonFile.getAbsolutePath() + ": " + e.getMessage());
-            e.printStackTrace(); // Print stack trace for the specific file error
-            // Do NOT re-throw here if you want the runner to continue with other files
-            // If you re-throw here, the outer finally block will still execute driver.quit()
+            e.printStackTrace();
         } finally {
-            webDriver.quit();
+            if (webDriver != null) {
+                webDriver.quit();
+            }
+        }
+    }
+    
+    /**
+     * Takes a screenshot of the current WebDriver instance and saves it.
+     * Screenshots are stored in the specified base directory.
+     * Filenames are generated based on the scenario name, page number, and a timestamp.
+     *
+     * @param driver The WebDriver instance.
+     * @param scenarioName The name of the test scenario.
+     * @param pageNumber The current page number within the scenario.
+     * @param baseDir The base directory where screenshots should be saved.
+     */
+    private void takeScreenshot(WebDriver driver, String scenarioName, int pageNumber, String baseDir) {
+        // Create the specified base directory if it doesn't exist
+        File screenshotsDir = new File(baseDir);
+        if (!screenshotsDir.exists()) {
+            screenshotsDir.mkdirs();
+        }
+        
+        // Sanitize scenarioName for filename (replace spaces and special chars)
+        String sanitizedScenarioName = scenarioName.replaceAll("[^a-zA-Z0-9.-]", "_");
+        
+        // Generate a timestamp for unique filenames
+        String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        
+        // Construct the filename: scenarioName_pageX_timestamp.png
+        String fileName = String.format("%s_page%d_%s.png", sanitizedScenarioName, pageNumber, timestamp);
+        String fullPath = screenshotsDir.getAbsolutePath() + File.separator + fileName;
+        
+        try {
+            TakesScreenshot ts = (TakesScreenshot) driver;
+            File sourceFile = ts.getScreenshotAs(OutputType.FILE);
+            File destinationFile = new File(fullPath);
+            FileHandler.copy(sourceFile, destinationFile);
+            System.out.println("Screenshot saved to: " + destinationFile.getAbsolutePath());
+            
+        } catch (IOException e) {
+            System.err.println("Failed to save screenshot: " + e.getMessage());
+            e.printStackTrace();
+        } catch (ClassCastException e) {
+            System.err.println("WebDriver cannot be cast to TakesScreenshot. This driver does not support screenshots.");
+            e.printStackTrace();
         }
     }
 }
