@@ -8,13 +8,6 @@ import com.ayago.smartuitest.testscenario.Action;
  * like Click, Enter, Submit.
  */
 public interface ActionStrategy {
-    /**
-     * Executes the specific web action.
-     *
-     * @param action   The action details derived from the test scenario.
-     * @param resolver The ElementResolver instance to find web elements.
-     */
-    void execute(Action action, ElementResolver resolver);
     
     /**
      * Returns the concrete Action class (e.g., ClickAction.class) that this strategy handles.

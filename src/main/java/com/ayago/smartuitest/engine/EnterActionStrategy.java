@@ -5,11 +5,7 @@ import com.ayago.smartuitest.testscenario.EnterAction;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions; // Import ExpectedConditions
-import org.openqa.selenium.support.ui.WebDriverWait; // Import WebDriverWait
 import org.springframework.stereotype.Component;
-
-import java.time.Duration; // Import Duration
 
 /**
  * Strategy for performing an 'Enter' action (typing text into a field).
@@ -19,49 +15,6 @@ import java.time.Duration; // Import Duration
  */
 @Component
 class EnterActionStrategy implements ActionStrategy {
-    
-    /**
-     * Executes the enter (type text) action.
-     * Waits for the target element to be visible and clickable before interacting.
-     *
-     * @param action   The action details, expected to be an instance of EnterAction.
-     * @param resolver The ElementResolver to find the target web element.
-     * must be added to the ActionStrategy interface and passed
-     * by the calling code (e.g., WebInteractionEngine).
-     * @throws IllegalArgumentException if the action is not an EnterAction, or if targetField/value are invalid.
-     * @throws RuntimeException         if the target field cannot be found or interacted with
-     * (including timeout during waiting).
-     */
-    @Override
-    public void execute(Action action, ElementResolver resolver) { // Added WebDriver parameter
-        if (!(action instanceof EnterAction enterAction)) {
-            throw new IllegalArgumentException("Action provided is not an instance of EnterAction: " + action.getClass().getName());
-        }
-        String targetField = enterAction.getTargetField();
-        String value = getValueToUse(enterAction, targetField); // Validate targetField and value
-        
-        // Resolve the field using the provided ElementResolver.
-        // Note: resolver.resolveField should ideally handle basic NoSuchElementException,
-        // but the wait below handles interactability issues after finding the element.
-        WebElement field = resolver.resolveField(targetField);
-        
-        // Add explicit wait for the element to be clickable (visible and enabled)
-        // Adjust the timeout (10 seconds here) based on your application's performance.
-        WebDriverWait wait = new WebDriverWait(resolver.underlyingDriver(), Duration.ofSeconds(15));
-        
-        try {
-            // Wait until the element is visible and enabled so we can interact.
-            // ExpectedConditions.elementToBeClickable is a good choice for input fields.
-            wait.until(ExpectedConditions.elementToBeClickable(field));
-            
-            field.clear(); // Clear the field before sending new keys.
-            field.sendKeys(value, Keys.ENTER); // Send the keys.
-            System.out.println("Successfully executed EnterAction on targetField: " + targetField + " with value: '" + value + "'");
-        } catch (Exception e) {
-            // Catch exceptions during the wait (TimeoutException) or sendKeys (ElementNotInteractableException, etc.)
-            throw new RuntimeException("Failed to enter text into targetField: '" + targetField + "'. Error: " + e.getMessage(), e);
-        }
-    }
     
     /**
      * Validates and returns the value to be used for the EnterAction.

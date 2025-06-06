@@ -32,27 +32,6 @@ public class WebInteractionEngine{
         this.elementResolver = new WebDriverElementResolver(driver);
     }
     
-    /**
-     * Performs a web action based on the type of Action object provided.
-     * It retrieves the appropriate strategy from the {@link ActionStrategyRegistry}
-     * and delegates the execution to it, providing the necessary WebDriver and ElementResolver.
-     *
-     * @param action The Action object (e.g., ClickAction, EnterAction, SubmitAction).
-     * @throws RuntimeException if the action cannot be performed (e.g., element not found, or strategy execution fails).
-     * @throws IllegalArgumentException if the provided action is null or no strategy is found for its type.
-     */
-    public void performAction(Action action) {
-        if (action == null) {
-            throw new IllegalArgumentException("Action to perform cannot be null.");
-        }
-        System.out.println("SmartLocatorEngine: Attempting to perform action: " + action);
-        
-        ActionStrategy strategy = actionStrategyRegistry.getStrategy(action);
-        strategy.execute(action, this.elementResolver);
-        
-        System.out.println("SmartLocatorEngine: Action performed successfully: " + action);
-    }
-    
     public String getFieldValue(String fieldName){
         WebElement webElement = this.elementResolver.resolveField(fieldName);
         return webElement.getAttribute("value");
