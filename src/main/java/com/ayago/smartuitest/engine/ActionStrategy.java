@@ -23,5 +23,7 @@ public interface ActionStrategy {
      * @return The Class object of the Action type this strategy is responsible for.
      */
     Class<? extends Action> getActionType();
+    
+    void execute(Action action, Runnable executeBefore, ElementResolver elementResolver);
 }
 

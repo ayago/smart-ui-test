@@ -3,9 +3,7 @@ package com.ayago.smartuitest.engine;
 import com.ayago.smartuitest.testscenario.Action;
 import com.ayago.smartuitest.testscenario.ClickAction;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.Point;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.springframework.stereotype.Component;
@@ -87,6 +85,62 @@ class ClickActionStrategy implements ActionStrategy {
     @Override
     public Class<? extends Action> getActionType() {
         return ClickAction.class;
+    }
+    
+    @Override
+    public void execute(Action action, Runnable executeBefore, ElementResolver resolver){
+        if (!(action instanceof ClickAction clickAction)) {
+            throw new IllegalArgumentException("Action provided is not an instance of ClickAction: " + action.getClass().getName());
+        }
+        String target = clickAction.getTarget();
+        
+        if (target == null || target.trim().isEmpty()) {
+            throw new IllegalArgumentException("ClickAction target cannot be null or empty.");
+        }
+        
+        WebElement elementToClick;
+        try {
+            // Prioritize finding common clickable elements directly.
+            // Uses normalize-space() for robust text matching in buttons/links
+            // and checks @value for input buttons/submits.
+            // This XPath looks for:
+            // 1. <button> elements with matching normalized text.
+            // 2. <a> (link) elements with matching normalized text.
+            // 3. <input type="button"> elements with matching @value attribute.
+            // 4. <input type="submit"> elements with matching @value attribute.
+            elementToClick = resolver.underlyingDriver().findElement(By.xpath(
+                "//button[normalize-space(.)='" + target + "'] | " +
+                    "//a[normalize-space(.)='" + target + "'] | " +
+                    "//input[@type='button' and @value='" + target + "'] | " +
+                    "//input[@type='submit' and @value='" + target + "']"
+            ));
+            System.out.println("ClickActionStrategy: Found target '" + target + "' as a common clickable element (button/link/input[@type='button' or @type='submit']).");
+        } catch (NoSuchElementException e) {
+            // If not found as a common clickable element, try resolving it using the ElementResolver.
+            // This allows clicking on other elements that might be identified by resolveField's logic
+            // (e.g., an element found via its label, placeholder, id, name, title, or aria-label).
+            System.out.println("ClickActionStrategy: Target '" + target + "' not found as a common clickable element. Attempting to resolve via ElementResolver.");
+            try {
+                elementToClick = resolver.resolveField(target);
+            } catch (RuntimeException re) {
+                // Chain the exception to provide context.
+                throw new RuntimeException("Clickable element or field not found for target: '" + target + "'. Resolver error: " + re.getMessage(), re);
+            }
+        }
+        
+        try {
+            System.out.println("Attempting click on target: '" + target + "'");
+            Actions actions = new Actions(resolver.underlyingDriver());
+            actions.scrollToElement(elementToClick).build().perform();
+            executeBefore.run();
+            elementToClick.click();
+            
+            System.out.println("Successfully executed ClickAction on target: '" + target + "' (click)");
+            
+        } catch (Exception e) {
+            // Catch broader exceptions during click (e.g., ElementNotInteractableException)
+            throw new RuntimeException("Failed to click on target: '" + target + "'. Element found but click failed. Error: " + e.getMessage(), e);
+        }
     }
 }
 

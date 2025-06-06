@@ -57,5 +57,17 @@ public class WebInteractionEngine{
         WebElement webElement = this.elementResolver.resolveField(fieldName);
         return webElement.getAttribute("value");
     }
+    
+    public void performAction(Action action, Runnable executeBefore){
+        if (action == null) {
+            throw new IllegalArgumentException("Action to perform cannot be null.");
+        }
+        System.out.println("SmartLocatorEngine: Attempting to perform action: " + action);
+        
+        ActionStrategy strategy = actionStrategyRegistry.getStrategy(action);
+        strategy.execute(action, executeBefore, this.elementResolver);
+        
+        System.out.println("SmartLocatorEngine: Action performed successfully: " + action);
+    }
 }
 

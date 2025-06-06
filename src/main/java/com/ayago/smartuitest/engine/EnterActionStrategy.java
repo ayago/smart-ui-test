@@ -3,8 +3,8 @@ package com.ayago.smartuitest.engine;
 import com.ayago.smartuitest.testscenario.Action;
 import com.ayago.smartuitest.testscenario.EnterAction;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver; // Import WebDriver
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions; // Import ExpectedConditions
 import org.openqa.selenium.support.ui.WebDriverWait; // Import WebDriverWait
 import org.springframework.stereotype.Component;
@@ -93,5 +93,31 @@ class EnterActionStrategy implements ActionStrategy {
     @Override
     public Class<? extends Action> getActionType() {
         return EnterAction.class;
+    }
+    
+    @Override
+    public void execute(Action action, Runnable executeBefore, ElementResolver resolver){
+        if (!(action instanceof EnterAction enterAction)) {
+            throw new IllegalArgumentException("Action provided is not an instance of EnterAction: " + action.getClass().getName());
+        }
+        String targetField = enterAction.getTargetField();
+        String value = getValueToUse(enterAction, targetField); // Validate targetField and value
+        
+        // Resolve the field using the provided ElementResolver.
+        // Note: resolver.resolveField should ideally handle basic NoSuchElementException,
+        // but the wait below handles interactability issues after finding the element.
+        WebElement field = resolver.resolveField(targetField);
+        
+        try {
+            Actions actions = new Actions(resolver.underlyingDriver());
+            actions.scrollToElement(field).build().perform();
+            executeBefore.run();
+            field.clear(); // Clear the field before sending new keys.
+            field.sendKeys(value, Keys.ENTER); // Send the keys.
+            System.out.println("Successfully executed EnterAction on targetField: " + targetField + " with value: '" + value + "'");
+        } catch (Exception e) {
+            // Catch exceptions during the wait (TimeoutException) or sendKeys (ElementNotInteractableException, etc.)
+            throw new RuntimeException("Failed to enter text into targetField: '" + targetField + "'. Error: " + e.getMessage(), e);
+        }
     }
 }

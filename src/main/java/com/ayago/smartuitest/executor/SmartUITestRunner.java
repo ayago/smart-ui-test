@@ -24,6 +24,7 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import static java.nio.file.Files.walk;
 
@@ -31,7 +32,8 @@ import static java.nio.file.Files.walk;
 class SmartUITestRunner implements CommandLineRunner {
     private final JsonTestScenarioParser parser;
     private final WebInteractionEngineFactory webInteractionEngineFactory;
-    private final FeatureManagerClient featureManager; // Assuming FeatureManagerClient exists
+    private final FeatureManagerClient featureManager;
+    private final ExecutionPhotographer executionPhotographer;
     
     // Inject the screenshot folder from application.yaml using @Value
     @Value("${screenshot.folder}")
@@ -40,11 +42,14 @@ class SmartUITestRunner implements CommandLineRunner {
     public SmartUITestRunner(
         JsonTestScenarioParser parser,
         WebInteractionEngineFactory webInteractionEngineFactory,
-        FeatureManagerClient featureManager // Assuming FeatureManagerClient exists
+        FeatureManagerClient featureManager,
+        ExecutionPhotographer executionPhotographer
+        // Assuming FeatureManagerClient exists
     ) {
         this.parser = parser;
         this.webInteractionEngineFactory = webInteractionEngineFactory;
         this.featureManager = featureManager; // Assuming FeatureManagerClient exists
+        this.executionPhotographer = executionPhotographer;
     }
     
     @Override
@@ -111,32 +116,35 @@ class SmartUITestRunner implements CommandLineRunner {
             System.out.println("Target Host: " + definition.getHost());
             featureManager.applyFeatureFlags(definition.getFeatures()); // Assuming applyFeatureFlags exists
             
-            int pageCounter = 0; // To keep track of page numbers for screenshot naming
-            for (Page page : definition.getPages()) {
-                pageCounter++;
-                // Use the injected screenshotsBaseDir
-                takeScreenshot(webDriver, page.getName(), pageCounter, screenshotsBaseDir);
-                
-                for (ExpectedElement expected : page.getExpected()) {
-                    String actualValue = interactionEngine.getFieldValue(expected.getTarget());
-                    if (!actualValue.equals(expected.getValue())) {
-                        throw new AssertionError(
-                            "Expected field '" + expected.getTarget() + "' to be '" + expected.getValue() + "' but found '" +
-                                actualValue + "'");
+            IntStream.range(0, definition.getPages().size())
+                .forEach(pageCounter -> {
+                    Page page = definition.getPages().get(pageCounter);
+                    
+                    executionPhotographer.takeScreenshot(webDriver, page.getName()+"-On_Page", pageCounter, screenshotsBaseDir);
+                    
+                    for (ExpectedElement expected : page.getExpected()) {
+                        String actualValue = interactionEngine.getFieldValue(expected.getTarget());
+                        if (!actualValue.equals(expected.getValue())) {
+                            throw new AssertionError(
+                                "Expected field '" + expected.getTarget() + "' to be '" + expected.getValue() + "' but found '" +
+                                    actualValue + "'");
+                        }
                     }
-                }
-                
-                Action action = page.getAction();
-                interactionEngine.performAction(action);
-            }
+                    
+                    Action action = page.getAction();
+                    
+                    interactionEngine.performAction(
+                        action,
+                        () -> executionPhotographer.takeScreenshot(webDriver, page.getName()+"-On_Page", pageCounter, screenshotsBaseDir)
+                    );
+                });
+            
             
         } catch (Exception e) {
             System.err.println("Error running test scenario from file " + jsonFile.getAbsolutePath() + ": " + e.getMessage());
             e.printStackTrace();
         } finally {
-            if (webDriver != null) {
-                webDriver.quit();
-            }
+            webDriver.quit();
         }
     }
     
@@ -150,7 +158,7 @@ class SmartUITestRunner implements CommandLineRunner {
      * @param pageNumber The current page number within the scenario.
      * @param baseDir The base directory where screenshots should be saved.
      */
-    private void takeScreenshot(WebDriver driver, String scenarioName, int pageNumber, String baseDir) {
+    public void takeScreenshot(WebDriver driver, String scenarioName, int pageNumber, String baseDir) {
         // Create the specified base directory if it doesn't exist
         File screenshotsDir = new File(baseDir);
         if (!screenshotsDir.exists()) {
