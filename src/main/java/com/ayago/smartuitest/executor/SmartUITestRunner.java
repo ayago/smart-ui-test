@@ -31,19 +31,21 @@ class SmartUITestRunner implements CommandLineRunner {
     
     // Inject the screenshot folder from application.yaml using @Value
     @Value("${screenshot.folder}")
-    private String screenshotsBaseDir;
+    private final String screenshotsBaseDir;
     
     public SmartUITestRunner(
         JsonTestScenarioParser parser,
         WebInteractionEngineFactory webInteractionEngineFactory,
         FeatureManagerClient featureManager,
-        ExecutionPhotographer executionPhotographer
+        ExecutionPhotographer executionPhotographer,
+        RunnerProperties runnerProperties
         // Assuming FeatureManagerClient exists
     ) {
         this.parser = parser;
         this.webInteractionEngineFactory = webInteractionEngineFactory;
-        this.featureManager = featureManager; // Assuming FeatureManagerClient exists
+        this.featureManager = featureManager; // Assuming Featug zx x v x xzhxvzhx vanagerClient exists
         this.executionPhotographer = executionPhotographer;
+        this.screenshotsBaseDir = runnerProperties.getScreenShot().getFolder();
     }
     
     @Override
@@ -54,10 +56,6 @@ class SmartUITestRunner implements CommandLineRunner {
         if (directoryPath == null) return; // Exit if path is invalid
         
         try {
-            if (args.length == 0) {
-                System.out.println("Please provide the directory path containing JSON test scenario files as an argument.");
-                return; // Exit if no argument is provided
-            }
             
             List<File> jsonFiles = walk(Paths.get(directoryPath))
                 .filter(Files::isRegularFile)
