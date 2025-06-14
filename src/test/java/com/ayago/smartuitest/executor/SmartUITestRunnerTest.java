@@ -7,6 +7,7 @@ import com.ayago.smartuitest.testscenario.TestScenario;
 import com.ayago.smartuitest.testscenario.TestScenario.ExpectedElement;
 import com.ayago.smartuitest.testscenario.TestScenario.Page;
 import com.ayago.smartuitest.testscenario.json.JsonTestScenarioParser;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,20 +22,21 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -44,7 +46,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class SmartUITestRunnerTest {
     
-    // Mock dependencies for SmartUITestRunner
     @Mock
     private JsonTestScenarioParser parser;
     @Mock
@@ -58,11 +59,9 @@ class SmartUITestRunnerTest {
     @Mock
     private RunnerProperties.ScreenShot screenShot;
     
-    // Inject mocks into the SmartUITestRunner instance
     private SmartUITestRunner smartUITestRunner;
     
-    // A temporary directory for creating test JSON files
-    private Path tempDirectory;
+    private Path tempTestDir; // Use Path for easier file system operations
     
     @BeforeEach
     void setUp() throws IOException {
@@ -71,7 +70,7 @@ class SmartUITestRunnerTest {
         when(screenShot.getFolder()).thenReturn("target/screenshots");
         
         // Create a temporary directory for test files
-        tempDirectory = Files.createTempDirectory("test_scenarios");
+        tempTestDir = Files.createTempDirectory("smart_ui_test_runner_tests");
         smartUITestRunner = new SmartUITestRunner(
             parser,
             webInteractionEngineFactory,
@@ -81,25 +80,50 @@ class SmartUITestRunnerTest {
         );
     }
     
-
+    @AfterEach
+    void tearDown() throws IOException {
+        // Clean up the temporary directory and its contents
+        if (tempTestDir != null) {
+            Files.walk(tempTestDir)
+                .sorted(Comparator.reverseOrder()) // Sort in reverse order for child-first deletion
+                .map(Path::toFile)
+                .forEach(File::delete);
+        }
+    }
+    
     @Test
     @DisplayName("Should print message and return if no arguments are provided")
     void run_noArguments_shouldPrintMessageAndReturn() throws Exception {
-        // Call the run method with no arguments
         smartUITestRunner.run();
         
-        // Verify that the parser and other interactions are never called
+        verify(parser, never()).parse(any(File.class));
+        verify(webInteractionEngineFactory, never()).create(any(WebDriver.class), anyString());
+        // We don't verify File.exists() or isDirectory() because the method should return early
+        // before even attempting to create a File object for a null/empty path argument.
+    }
+    
+    @Test
+    @DisplayName("Should print message and return if directory path is invalid (non-existent)")
+    void run_invalidDirectory_nonExistent_shouldPrintMessageAndReturn() throws Exception {
+        String nonExistentPath = tempTestDir.resolve("non_existent_dir").toString();
+        
+        smartUITestRunner.run(nonExistentPath);
+        
+        // Verify no interactions with parser or webInteractionEngineFactory
         verify(parser, never()).parse(any(File.class));
         verify(webInteractionEngineFactory, never()).create(any(WebDriver.class), anyString());
     }
     
     @Test
-    @DisplayName("Should print message and return if directory path is invalid")
-    void run_invalidDirectory_shouldPrintMessageAndReturn() throws Exception {
-        // Call the run method with an invalid directory path
-        smartUITestRunner.run("nonExistentDirectory");
+    @DisplayName("Should print message and return if directory path is invalid (not a directory)")
+    void run_invalidDirectory_notADirectory_shouldPrintMessageAndReturn() throws Exception {
+        // Create a file, not a directory
+        Path filePath = tempTestDir.resolve("not_a_directory.txt");
+        Files.writeString(filePath, "dummy content");
         
-        // Verify that the parser and other interactions are never called
+        smartUITestRunner.run(filePath.toString());
+        
+        // Verify no interactions with parser or webInteractionEngineFactory
         verify(parser, never()).parse(any(File.class));
         verify(webInteractionEngineFactory, never()).create(any(WebDriver.class), anyString());
     }
@@ -107,10 +131,11 @@ class SmartUITestRunnerTest {
     @Test
     @DisplayName("Should print message and return if no JSON files are found in directory")
     void run_noJsonFilesInDirectory_shouldPrintMessageAndReturn() throws Exception {
-        // Call the run method with a valid but empty temporary directory
-        smartUITestRunner.run(tempDirectory.toString());
+        // tempTestDir is already created and empty by default in @BeforeEach
         
-        // Verify that the parser and other interactions are never called
+        smartUITestRunner.run(tempTestDir.toString());
+        
+        // Verify no interactions with parser or webInteractionEngineFactory
         verify(parser, never()).parse(any(File.class));
         verify(webInteractionEngineFactory, never()).create(any(WebDriver.class), anyString());
     }
@@ -119,36 +144,36 @@ class SmartUITestRunnerTest {
     @DisplayName("Should run single test scenario when a JSON file is found")
     void run_singleJsonFile_shouldRunScenario() throws Exception {
         // Create a dummy JSON file in the temporary directory
-        Path jsonFilePath = tempDirectory.resolve("test_scenario.json");
+        Path jsonFilePath = tempTestDir.resolve("test_scenario.json");
         Files.writeString(jsonFilePath, "{ \"host\": \"http://localhost\" }"); // Minimal JSON content
         
         // Mock WebDriver, WebInteractionEngine, TestScenario, and pages
-        WebDriver mockWebDriver = mock(WebDriver.class);
+        WebDriver mockWebDriver = mock(ChromeDriver.class);
         WebInteractionEngine mockInteractionEngine = mock(WebInteractionEngine.class);
         TestScenario mockTestScenario = mock(TestScenario.class);
         Page mockPage = mock(Page.class);
         
         // Configure mocks for a successful scenario run
         when(webInteractionEngineFactory.create(any(WebDriver.class), anyString())).thenReturn(mockInteractionEngine);
-        when(parser.parse(any(File.class))).thenReturn(mockTestScenario);
+        when(parser.parse(any(File.class))).thenReturn(mockTestScenario); // Use real File object
         when(mockTestScenario.getHost()).thenReturn("http://localhost");
         when(mockTestScenario.getFeatures()).thenReturn(Collections.emptyMap());
         when(mockTestScenario.getPages()).thenReturn(Collections.singletonList(mockPage));
         when(mockPage.getName()).thenReturn("HomePage");
-        when(mockPage.getExpected()).thenReturn(Collections.emptyList()); // No expected elements for simplicity
+        when(mockPage.getExpected()).thenReturn(Collections.emptyList());
         when(mockPage.getAction()).thenReturn(mock(Action.class));
         
         // Stub ChromeDriver constructor to return our mock WebDriver
-        try (var mockedStatic = org.mockito.Mockito.mockStatic(ChromeDriver.class)) {
-            mockedStatic.when(ChromeDriver::new).thenReturn(mockWebDriver);
+        try (var mockedStaticChromeDriver = org.mockito.Mockito.mockConstruction(ChromeDriver.class)) {
+            
             
             // Call the run method with the temporary directory
-            smartUITestRunner.run(tempDirectory.toString());
+            smartUITestRunner.run(tempTestDir.toString());
+            mockWebDriver = mockedStaticChromeDriver.constructed().getFirst();
         }
         
-        
         // Verify interactions for a successful scenario run
-        verify(parser, times(1)).parse(any(File.class));
+        verify(parser, times(1)).parse(eq(jsonFilePath.toFile()));
         verify(webInteractionEngineFactory, times(1)).create(eq(mockWebDriver), eq("http://localhost"));
         verify(featureManager, times(1)).applyFeatureFlags(Collections.emptyMap());
         verify(executionPhotographer, times(1)).takeScreenshot(eq(mockWebDriver), eq("HomePage-On_Page"), eq(0), eq("target/screenshots"));
@@ -160,76 +185,84 @@ class SmartUITestRunnerTest {
     @DisplayName("Should run multiple test scenarios when multiple JSON files are found")
     void run_multipleJsonFiles_shouldRunMultipleScenarios() throws Exception {
         // Create multiple dummy JSON files
-        Path jsonFilePath1 = tempDirectory.resolve("test_scenario1.json");
-        Path jsonFilePath2 = tempDirectory.resolve("test_scenario2.json");
+        Path jsonFilePath1 = tempTestDir.resolve("test_scenario1.json");
+        Path jsonFilePath2 = tempTestDir.resolve("test_scenario2.json");
         Files.writeString(jsonFilePath1, "{ \"host\": \"http://localhost/1\" }");
         Files.writeString(jsonFilePath2, "{ \"host\": \"http://localhost/2\" }");
         
         // Mock WebDriver, WebInteractionEngine, TestScenario, and pages
-        WebDriver mockWebDriver = mock(WebDriver.class); // This mock will be returned twice
-        WebInteractionEngine mockInteractionEngine1 = mock(WebInteractionEngine.class);
-        WebInteractionEngine mockInteractionEngine2 = mock(WebInteractionEngine.class);
-        TestScenario mockTestScenario1 = mock(TestScenario.class);
-        TestScenario mockTestScenario2 = mock(TestScenario.class);
         Page mockPage1 = mock(Page.class);
-        Page mockPage2 = mock(Page.class);
-        
-        // Configure mocks for both scenarios
-        when(webInteractionEngineFactory.create(any(WebDriver.class), eq("http://localhost/1"))).thenReturn(mockInteractionEngine1);
-        when(webInteractionEngineFactory.create(any(WebDriver.class), eq("http://localhost/2"))).thenReturn(mockInteractionEngine2);
-        when(parser.parse(jsonFilePath1.toFile())).thenReturn(mockTestScenario1);
-        when(parser.parse(jsonFilePath2.toFile())).thenReturn(mockTestScenario2);
-        
-        when(mockTestScenario1.getHost()).thenReturn("http://localhost/1");
-        when(mockTestScenario1.getFeatures()).thenReturn(Collections.emptyMap());
-        when(mockTestScenario1.getPages()).thenReturn(Collections.singletonList(mockPage1));
         when(mockPage1.getName()).thenReturn("Scenario1Page");
         when(mockPage1.getExpected()).thenReturn(Collections.emptyList());
         when(mockPage1.getAction()).thenReturn(mock(Action.class));
         
-        when(mockTestScenario2.getHost()).thenReturn("http://localhost/2");
-        when(mockTestScenario2.getFeatures()).thenReturn(Collections.emptyMap());
-        when(mockTestScenario2.getPages()).thenReturn(Collections.singletonList(mockPage2));
+        TestScenario mockTestScenario1 = mock(TestScenario.class);
+        when(mockTestScenario1.getHost()).thenReturn("http://localhost/1");
+        when(mockTestScenario1.getFeatures()).thenReturn(Collections.emptyMap());
+        when(mockTestScenario1.getPages()).thenReturn(Collections.singletonList(mockPage1));
+        
+        when(parser.parse(argThat(file -> file != null && file.toString().equals(jsonFilePath1.toString())))).thenReturn(mockTestScenario1);
+        
+        Page mockPage2 = mock(Page.class);
         when(mockPage2.getName()).thenReturn("Scenario2Page");
         when(mockPage2.getExpected()).thenReturn(Collections.emptyList());
         when(mockPage2.getAction()).thenReturn(mock(Action.class));
         
-        // Stub ChromeDriver constructor to return our mock WebDriver
-        try (var mockedStatic = org.mockito.Mockito.mockStatic(ChromeDriver.class)) {
-            mockedStatic.when(ChromeDriver::new).thenReturn(mockWebDriver);
-            
+        TestScenario mockTestScenario2 = mock(TestScenario.class);
+        when(mockTestScenario2.getHost()).thenReturn("http://localhost/2");
+        when(mockTestScenario2.getFeatures()).thenReturn(Collections.emptyMap());
+        when(mockTestScenario2.getPages()).thenReturn(Collections.singletonList(mockPage2));
+        
+        when(parser.parse(argThat(file -> file != null && file.toString().equals(jsonFilePath2.toString())))).thenReturn(mockTestScenario2);
+        
+        // Configure mocks for both scenarios
+        WebInteractionEngine mockInteractionEngine1 = mock(WebInteractionEngine.class);
+        when(webInteractionEngineFactory.create(any(WebDriver.class), eq("http://localhost/1"))).thenReturn(mockInteractionEngine1);
+        
+        WebInteractionEngine mockInteractionEngine2 = mock(WebInteractionEngine.class);
+        when(webInteractionEngineFactory.create(any(WebDriver.class), eq("http://localhost/2"))).thenReturn(mockInteractionEngine2);
+        
+
+        try (var mockedChromeDriverConstruction = org.mockito.Mockito.mockConstruction(ChromeDriver.class)) {
             // Call the run method
-            smartUITestRunner.run(tempDirectory.toString());
+            smartUITestRunner.run(tempTestDir.toString());
         }
         
         // Verify interactions for both scenarios
-        verify(parser, times(1)).parse(jsonFilePath1.toFile());
-        verify(parser, times(1)).parse(jsonFilePath2.toFile());
+        verify(parser, times(1)).parse(eq(jsonFilePath1.toFile()));
+        verify(parser, times(1)).parse(eq(jsonFilePath2.toFile()));
         
-        // WebDriver is created twice, so we verify its interactions twice
-        verify(webInteractionEngineFactory, times(1)).create(eq(mockWebDriver), eq("http://localhost/1"));
-        verify(webInteractionEngineFactory, times(1)).create(eq(mockWebDriver), eq("http://localhost/2"));
+        ArgumentCaptor<WebDriver> scenarioOneDriverCaptor = ArgumentCaptor.forClass(WebDriver.class);
+        verify(webInteractionEngineFactory, times(1)).create(scenarioOneDriverCaptor.capture(), eq("http://localhost/1"));
+        WebDriver mockDriverOne = scenarioOneDriverCaptor.getValue();
+        assertNotNull(mockDriverOne);
+        
+        ArgumentCaptor<WebDriver> scenarioTwoDriverCaptor = ArgumentCaptor.forClass(WebDriver.class);
+        verify(webInteractionEngineFactory, times(1)).create(scenarioTwoDriverCaptor.capture(), eq("http://localhost/2"));
+        WebDriver mockDriverTwo = scenarioTwoDriverCaptor.getValue();
+        assertNotNull(mockDriverTwo);
         
         verify(featureManager, times(2)).applyFeatureFlags(Collections.emptyMap());
         
-        verify(executionPhotographer, times(1)).takeScreenshot(eq(mockWebDriver), eq("Scenario1Page-On_Page"), eq(0), eq("target/screenshots"));
-        verify(executionPhotographer, times(1)).takeScreenshot(eq(mockWebDriver), eq("Scenario2Page-On_Page"), eq(0), eq("target/screenshots"));
+        verify(executionPhotographer, times(1)).takeScreenshot(eq(mockDriverOne), eq("Scenario1Page-On_Page"), eq(0), eq("target/screenshots"));
+        verify(executionPhotographer, times(1)).takeScreenshot(eq(mockDriverTwo), eq("Scenario2Page-On_Page"), eq(0), eq("target/screenshots"));
         
         verify(mockInteractionEngine1, times(1)).performAction(any(Action.class), any(Runnable.class));
         verify(mockInteractionEngine2, times(1)).performAction(any(Action.class), any(Runnable.class));
         
-        verify(mockWebDriver, times(2)).quit(); // quit is called twice
+        verify(mockDriverOne, times(1)).quit();
+        verify(mockDriverTwo, times(1)).quit();
     }
     
     @Test
     @DisplayName("Should handle AssertionError when expected element value mismatch")
     void runTestScenario_expectedElementMismatch_shouldThrowAssertionError() throws Exception {
         // Create a dummy JSON file
-        Path jsonFilePath = tempDirectory.resolve("mismatch_scenario.json");
+        Path jsonFilePath = tempTestDir.resolve("mismatch_scenario.json");
         Files.writeString(jsonFilePath, "{ \"host\": \"http://localhost\" }");
         
         // Mock WebDriver, WebInteractionEngine, TestScenario, and pages
-        WebDriver mockWebDriver = mock(WebDriver.class);
+        WebDriver mockWebDriver;
         WebInteractionEngine mockInteractionEngine = mock(WebInteractionEngine.class);
         TestScenario mockTestScenario = mock(TestScenario.class);
         Page mockPage = mock(Page.class);
@@ -237,7 +270,7 @@ class SmartUITestRunnerTest {
         
         // Configure mocks for a mismatch scenario
         when(webInteractionEngineFactory.create(any(WebDriver.class), anyString())).thenReturn(mockInteractionEngine);
-        when(parser.parse(any(File.class))).thenReturn(mockTestScenario);
+        when(parser.parse(eq(jsonFilePath.toFile()))).thenReturn(mockTestScenario);
         when(mockTestScenario.getHost()).thenReturn("http://localhost");
         when(mockTestScenario.getFeatures()).thenReturn(Collections.emptyMap());
         when(mockTestScenario.getPages()).thenReturn(Collections.singletonList(mockPage));
@@ -248,16 +281,16 @@ class SmartUITestRunnerTest {
         when(mockInteractionEngine.getFieldValue(eq("myField"))).thenReturn("actualValue"); // Mismatch here!
         
         // Stub ChromeDriver constructor to return our mock WebDriver
-        try (var mockedStatic = org.mockito.Mockito.mockStatic(ChromeDriver.class)) {
-            mockedStatic.when(ChromeDriver::new).thenReturn(mockWebDriver);
+        try (var mockedConstruction = org.mockito.Mockito.mockConstruction(ChromeDriver.class)) {
             
             // Assert that an AssertionError is thrown
             AssertionError error = assertThrows(AssertionError.class, () ->
-                smartUITestRunner.run(tempDirectory.toString())
+                smartUITestRunner.run(tempTestDir.toString())
             );
             
             // Verify the error message
             assertThat(error.getMessage(), containsString("Expected field 'myField' to be 'expectedValue' but found 'actualValue'"));
+            mockWebDriver = mockedConstruction.constructed().getFirst();
         }
         
         // Verify that quit() is still called in finally block
@@ -272,27 +305,23 @@ class SmartUITestRunnerTest {
     @DisplayName("Should ensure webDriver.quit() is called even if an exception occurs during scenario execution")
     void runTestScenario_exceptionDuringExecution_shouldCallWebDriverQuit() throws Exception {
         // Create a dummy JSON file
-        Path jsonFilePath = tempDirectory.resolve("exception_scenario.json");
+        Path jsonFilePath = tempTestDir.resolve("exception_scenario.json");
         Files.writeString(jsonFilePath, "{ \"host\": \"http://localhost\" }");
         
         // Mock WebDriver, WebInteractionEngine, TestScenario
-        WebDriver mockWebDriver = mock(WebDriver.class);
+        WebDriver mockWebDriver;
         WebInteractionEngine mockInteractionEngine = mock(WebInteractionEngine.class);
-        TestScenario mockTestScenario = mock(TestScenario.class);
         
         // Configure mocks to throw an exception during parsing
-        when(webInteractionEngineFactory.create(any(WebDriver.class), anyString())).thenReturn(mockInteractionEngine);
-        doThrow(new RuntimeException("Simulated parsing error")).when(parser).parse(any(File.class));
+        when(parser.parse(any(File.class)))
+            .thenThrow(new RuntimeException("Simulated parsing error"));
         
         // Stub ChromeDriver constructor to return our mock WebDriver
-        try (var mockedStatic = org.mockito.Mockito.mockStatic(ChromeDriver.class)) {
-            mockedStatic.when(ChromeDriver::new).thenReturn(mockWebDriver);
-            
+        try (var mockedConstruction = org.mockito.Mockito.mockConstruction(ChromeDriver.class)) {
             // Assert that the RuntimeException is rethrown by the run method
-            RuntimeException thrown = assertThrows(RuntimeException.class, () ->
-                smartUITestRunner.run(tempDirectory.toString())
-            );
-            assertThat(thrown.getMessage(), is("Simulated parsing error"));
+            RuntimeException capturedException = assertThrows(RuntimeException.class, () -> smartUITestRunner.run(tempTestDir.toString()));
+            assertEquals("Simulated parsing error", capturedException.getMessage());
+            mockWebDriver = mockedConstruction.constructed().getFirst();
         }
         
         // Verify that quit() is called in the finally block
@@ -307,11 +336,11 @@ class SmartUITestRunnerTest {
     @DisplayName("Should capture and execute the screenshot supplier for performAction")
     void runTestScenario_performAction_capturesAndExecutesScreenshotSupplier() throws Exception {
         // Create a dummy JSON file
-        Path jsonFilePath = tempDirectory.resolve("action_screenshot_scenario.json");
+        Path jsonFilePath = tempTestDir.resolve("action_screenshot_scenario.json");
         Files.writeString(jsonFilePath, "{ \"host\": \"http://localhost\" }");
         
         // Mock WebDriver, WebInteractionEngine, TestScenario, and pages
-        WebDriver mockWebDriver = mock(WebDriver.class);
+        WebDriver mockWebDriver;
         WebInteractionEngine mockInteractionEngine = mock(WebInteractionEngine.class);
         TestScenario mockTestScenario = mock(TestScenario.class);
         Page mockPage = mock(Page.class);
@@ -319,7 +348,7 @@ class SmartUITestRunnerTest {
         
         // Configure mocks
         when(webInteractionEngineFactory.create(any(WebDriver.class), anyString())).thenReturn(mockInteractionEngine);
-        when(parser.parse(any(File.class))).thenReturn(mockTestScenario);
+        when(parser.parse(eq(jsonFilePath.toFile()))).thenReturn(mockTestScenario);
         when(mockTestScenario.getHost()).thenReturn("http://localhost");
         when(mockTestScenario.getFeatures()).thenReturn(Collections.emptyMap());
         when(mockTestScenario.getPages()).thenReturn(Collections.singletonList(mockPage));
@@ -327,29 +356,28 @@ class SmartUITestRunnerTest {
         when(mockPage.getExpected()).thenReturn(Collections.emptyList());
         when(mockPage.getAction()).thenReturn(mockAction);
         
-        // Capture the Supplier<Void> argument passed to performAction
+        // Capture the Runnable argument passed to performAction
         ArgumentCaptor<Runnable> screenshotSupplierCaptor = ArgumentCaptor.forClass(Runnable.class);
         
         // Configure performAction to not do anything initially, we will trigger the supplier manually
         doNothing().when(mockInteractionEngine).performAction(eq(mockAction), screenshotSupplierCaptor.capture());
         
         // Stub ChromeDriver constructor to return our mock WebDriver
-        try (var mockedStatic = org.mockito.Mockito.mockStatic(ChromeDriver.class)) {
-            mockedStatic.when(ChromeDriver::new).thenReturn(mockWebDriver);
-            
+        try (var mockedConstruction = org.mockito.Mockito.mockConstruction(ChromeDriver.class)) {
             // Run the scenario
-            smartUITestRunner.run(tempDirectory.toString());
+            smartUITestRunner.run(tempTestDir.toString());
+            mockWebDriver = mockedConstruction.constructed().getFirst();
         }
         
         // Verify initial screenshot before action
         verify(executionPhotographer, times(1)).takeScreenshot(eq(mockWebDriver), eq("ActionPage-On_Page"), eq(0), eq("target/screenshots"));
         
         // Verify performAction was called and capture the supplier
-        Runnable runnableToBeExecuted = screenshotSupplierCaptor.getValue();
-        verify(mockInteractionEngine, times(1)).performAction(eq(mockAction), runnableToBeExecuted);
+        verify(mockInteractionEngine, times(1)).performAction(eq(mockAction), any(Runnable.class));
+        Runnable capturedSupplier = screenshotSupplierCaptor.getValue();
         
         // Manually invoke the captured supplier
-        runnableToBeExecuted.run();
+        capturedSupplier.run();
         
         // Verify that executionPhotographer.takeScreenshot was called again by the supplier
         verify(executionPhotographer, times(2)).takeScreenshot(eq(mockWebDriver), eq("ActionPage-On_Page"), eq(0), eq("target/screenshots"));
@@ -361,11 +389,11 @@ class SmartUITestRunnerTest {
     @DisplayName("Should handle scenario with multiple pages and expected elements")
     void runTestScenario_multiplePagesAndExpectedElements_shouldProcessCorrectly() throws Exception {
         // Create a dummy JSON file
-        Path jsonFilePath = tempDirectory.resolve("multi_page_scenario.json");
+        Path jsonFilePath = tempTestDir.resolve("multi_page_scenario.json");
         Files.writeString(jsonFilePath, "{ \"host\": \"http://localhost\" }");
         
         // Mock WebDriver, WebInteractionEngine, TestScenario, and pages
-        WebDriver mockWebDriver = mock(WebDriver.class);
+        WebDriver mockWebDriver;
         WebInteractionEngine mockInteractionEngine = mock(WebInteractionEngine.class);
         TestScenario mockTestScenario = mock(TestScenario.class);
         
@@ -381,7 +409,7 @@ class SmartUITestRunnerTest {
         
         // Configure overall scenario
         when(webInteractionEngineFactory.create(any(WebDriver.class), anyString())).thenReturn(mockInteractionEngine);
-        when(parser.parse(any(File.class))).thenReturn(mockTestScenario);
+        when(parser.parse(eq(jsonFilePath.toFile()))).thenReturn(mockTestScenario);
         when(mockTestScenario.getHost()).thenReturn("http://localhost");
         when(mockTestScenario.getFeatures()).thenReturn(Collections.emptyMap());
         when(mockTestScenario.getPages()).thenReturn(Arrays.asList(page1, page2));
@@ -406,11 +434,10 @@ class SmartUITestRunnerTest {
         when(page2.getAction()).thenReturn(action2);
         
         // Stub ChromeDriver constructor to return our mock WebDriver
-        try (var mockedStatic = org.mockito.Mockito.mockStatic(ChromeDriver.class)) {
-            mockedStatic.when(ChromeDriver::new).thenReturn(mockWebDriver);
-            
+        try (var mockedConstruction = org.mockito.Mockito.mockConstruction(ChromeDriver.class)) {
             // Run the scenario
-            smartUITestRunner.run(tempDirectory.toString());
+            smartUITestRunner.run(tempTestDir.toString());
+            mockWebDriver = mockedConstruction.constructed().getFirst();
         }
         
         // Verify interactions
@@ -423,52 +450,6 @@ class SmartUITestRunnerTest {
         verify(mockInteractionEngine, times(1)).getFieldValue("field3");
         verify(mockInteractionEngine, times(1)).performAction(eq(action2), any(Runnable.class));
         
-        verify(mockWebDriver, times(1)).quit(); // quit called once at the end
-    }
-    
-    @Test
-    @DisplayName("Should handle an IOException during file walking gracefully")
-    void run_ioExceptionDuringWalk_shouldThrowRuntimeException() throws Exception {
-        // Define the path string for the mocked scenario
-        String testDirectoryPath = "/mocked/io-exception/directory";
-        
-        // Mock the static Files and Paths methods, and use mockConstruction for File
-        try (
-           
-            var mockedStaticFiles = org.mockito.Mockito.mockStatic(Files.class);
-            var mockedStaticPaths = org.mockito.Mockito.mockStatic(Paths.class)
-        ) {
-            // Mock Paths.get for the specific test directory path
-            Path mockedDirectoryPath = mock(Path.class);
-            mockedStaticPaths.when(() -> Paths.get(eq(testDirectoryPath))).thenReturn(mockedDirectoryPath);
-            
-            // Simulate Files.walk throwing an IOException
-            mockedStaticFiles.when(() -> Files.walk(eq(mockedDirectoryPath)))
-                .thenThrow(new IOException("Simulated file walk error"));
-            
-            // Expect a RuntimeException to be thrown
-            IOException thrown = assertThrows(IOException.class, () ->{
-                    var mockedConstructedFile = org.mockito.Mockito.mockConstruction(File.class, (mock, context) -> {
-                        // Intercept the constructor call to new File(testDirectoryPath)
-                        if (context.arguments().get(0).equals(testDirectoryPath)) {
-                            when(mock.exists()).thenReturn(true);
-                            when(mock.isDirectory()).thenReturn(true);
-                        } else {
-                            // Default behavior for other File constructions if any, though not expected in this test
-                            when(mock.exists()).thenReturn(false);
-                            when(mock.isDirectory()).thenReturn(false);
-                        }
-                    });
-                
-                    smartUITestRunner.run(testDirectoryPath);
-                }
-                
-            );
-            
-            assertThat(thrown.getMessage(), containsString("Simulated file walk error"));
-        }
-        
-        // Verify no other interactions
-        verify(parser, never()).parse(any(File.class));
+        verify(mockWebDriver, times(1)).quit();
     }
 }

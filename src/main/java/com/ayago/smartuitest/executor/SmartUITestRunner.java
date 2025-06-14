@@ -14,6 +14,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -39,7 +40,6 @@ class SmartUITestRunner implements CommandLineRunner {
         FeatureManagerClient featureManager,
         ExecutionPhotographer executionPhotographer,
         RunnerProperties runnerProperties
-        // Assuming FeatureManagerClient exists
     ) {
         this.parser = parser;
         this.webInteractionEngineFactory = webInteractionEngineFactory;
@@ -99,7 +99,7 @@ class SmartUITestRunner implements CommandLineRunner {
      *
      * @param jsonFile The JSON file containing the test scenario definition.
      */
-    private void runTestScenario(File jsonFile) {
+    private void runTestScenario(File jsonFile) throws IOException{
         WebDriver webDriver = new ChromeDriver();
         try {
             TestScenario definition = parser.parse(jsonFile);
@@ -132,9 +132,6 @@ class SmartUITestRunner implements CommandLineRunner {
                 });
             
             
-        } catch (Exception e) {
-            System.err.println("Error running test scenario from file " + jsonFile.getAbsolutePath() + ": " + e.getMessage());
-            e.printStackTrace();
         } finally {
             webDriver.quit();
         }

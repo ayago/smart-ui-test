@@ -5,10 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d1b51daa-cbf5-472c-9bf5-c61a15d66d3e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/executor/RunnerProperties.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/ayago/smartuitest/executor/SmartUITestRunnerTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/executor/SmartUITestRunner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/executor/SmartUITestRunner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/ayago/smartuitest/executor/SmartUITestRunnerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/ayago/smartuitest/executor/SmartUITestRunnerTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,10 +36,17 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Application.SecretMessageParser$GoogleDocPlainTextParser.executor": "Debug",
+    "Application.SecretMessageParser.executor": "Run",
     "Application.SmartUITestApplication.executor": "Run",
     "JUnit.JsonTestScenarioParserTest.executor": "Run",
     "JUnit.SmartUITestRunnerTest.executor": "Run",
-    "JUnit.SmartUITestRunnerTest.run_ioExceptionDuringWalk_shouldThrowRuntimeException.executor": "Debug",
+    "JUnit.SmartUITestRunnerTest.runTestScenario_exceptionDuringExecution_shouldCallWebDriverQuit.executor": "Run",
+    "JUnit.SmartUITestRunnerTest.runTestScenario_expectedElementMismatch_shouldThrowAssertionError.executor": "Run",
+    "JUnit.SmartUITestRunnerTest.runTestScenario_performAction_capturesAndExecutesScreenshotSupplier.executor": "Run",
+    "JUnit.SmartUITestRunnerTest.run_ioExceptionDuringWalk_shouldThrowRuntimeException.executor": "Run",
+    "JUnit.SmartUITestRunnerTest.run_multipleJsonFiles_shouldRunMultipleScenarios.executor": "Run",
+    "JUnit.SmartUITestRunnerTest.run_singleJsonFile_shouldRunScenario.executor": "Run",
     "JUnit.TestScenarioParserTest.executor": "Run",
     "JUnit.TestScenarioParserTest.parse_featuresAfterHost_parsesCorrectly.executor": "Debug",
     "JUnit.TestScenarioParserTest.parse_featuresAtEnd_parsesCorrectly.executor": "Debug",
@@ -75,37 +81,7 @@
       <recent name="com.ayago.testscenario" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.SmartUITestRunnerTest.run_multipleJsonFiles_shouldRunMultipleScenarios">
-    <configuration name="SmartUITestApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.ayago.smartuitest.SmartUITestApplication" />
-      <module name="declarative-functional-test" />
-      <option name="PROGRAM_PARAMETERS" value="$PROJECT_DIR$/src/main/resources" />
-      <option name="VM_PARAMETERS" value="-DscreenShot.folder=&quot;$PROJECT_DIR$/../../screenshots&quot; " />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.ayago.smartuitest.executor.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="JsonTestScenarioParserTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="declarative-functional-test" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.ayago.smartuitest.testscenario.json.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.ayago.smartuitest.testscenario.json" />
-      <option name="MAIN_CLASS_NAME" value="com.ayago.smartuitest.testscenario.json.JsonTestScenarioParserTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="JUnit.SmartUITestRunnerTest">
     <configuration name="SmartUITestRunnerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="declarative-functional-test" />
       <extension name="coverage">
@@ -121,7 +97,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SmartUITestRunnerTest.run_ioExceptionDuringWalk_shouldThrowRuntimeException" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="SmartUITestRunnerTest.runTestScenario_exceptionDuringExecution_shouldCallWebDriverQuit" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="declarative-functional-test" />
       <extension name="coverage">
         <pattern>
@@ -131,13 +107,13 @@
       </extension>
       <option name="PACKAGE_NAME" value="com.ayago.smartuitest.executor" />
       <option name="MAIN_CLASS_NAME" value="com.ayago.smartuitest.executor.SmartUITestRunnerTest" />
-      <option name="METHOD_NAME" value="run_ioExceptionDuringWalk_shouldThrowRuntimeException" />
+      <option name="METHOD_NAME" value="runTestScenario_exceptionDuringExecution_shouldCallWebDriverQuit" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SmartUITestRunnerTest.run_multipleJsonFiles_shouldRunMultipleScenarios" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="SmartUITestRunnerTest.runTestScenario_expectedElementMismatch_shouldThrowAssertionError" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="declarative-functional-test" />
       <extension name="coverage">
         <pattern>
@@ -147,26 +123,58 @@
       </extension>
       <option name="PACKAGE_NAME" value="com.ayago.smartuitest.executor" />
       <option name="MAIN_CLASS_NAME" value="com.ayago.smartuitest.executor.SmartUITestRunnerTest" />
-      <option name="METHOD_NAME" value="run_multipleJsonFiles_shouldRunMultipleScenarios" />
+      <option name="METHOD_NAME" value="runTestScenario_expectedElementMismatch_shouldThrowAssertionError" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SmartUITestRunnerTest.runTestScenario_multiplePagesAndExpectedElements_shouldProcessCorrectly" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="declarative-functional-test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.ayago.smartuitest.executor.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.ayago.smartuitest.executor" />
+      <option name="MAIN_CLASS_NAME" value="com.ayago.smartuitest.executor.SmartUITestRunnerTest" />
+      <option name="METHOD_NAME" value="runTestScenario_multiplePagesAndExpectedElements_shouldProcessCorrectly" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SmartUITestRunnerTest.runTestScenario_performAction_capturesAndExecutesScreenshotSupplier" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="declarative-functional-test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.ayago.smartuitest.executor.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.ayago.smartuitest.executor" />
+      <option name="MAIN_CLASS_NAME" value="com.ayago.smartuitest.executor.SmartUITestRunnerTest" />
+      <option name="METHOD_NAME" value="runTestScenario_performAction_capturesAndExecutesScreenshotSupplier" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <list>
-      <item itemvalue="Application.SmartUITestApplication" />
+      <item itemvalue="JUnit.SmartUITestRunnerTest.runTestScenario_exceptionDuringExecution_shouldCallWebDriverQuit" />
+      <item itemvalue="JUnit.SmartUITestRunnerTest.runTestScenario_expectedElementMismatch_shouldThrowAssertionError" />
+      <item itemvalue="JUnit.SmartUITestRunnerTest.runTestScenario_multiplePagesAndExpectedElements_shouldProcessCorrectly" />
+      <item itemvalue="JUnit.SmartUITestRunnerTest.runTestScenario_performAction_capturesAndExecutesScreenshotSupplier" />
       <item itemvalue="JUnit.SmartUITestRunnerTest" />
-      <item itemvalue="JUnit.SmartUITestRunnerTest.run_ioExceptionDuringWalk_shouldThrowRuntimeException" />
-      <item itemvalue="JUnit.SmartUITestRunnerTest.run_multipleJsonFiles_shouldRunMultipleScenarios" />
-      <item itemvalue="JUnit.JsonTestScenarioParserTest" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.SmartUITestRunnerTest.run_multipleJsonFiles_shouldRunMultipleScenarios" />
         <item itemvalue="JUnit.SmartUITestRunnerTest" />
-        <item itemvalue="JUnit.SmartUITestRunnerTest.run_ioExceptionDuringWalk_shouldThrowRuntimeException" />
-        <item itemvalue="Application.SmartUITestApplication" />
-        <item itemvalue="JUnit.JsonTestScenarioParserTest" />
+        <item itemvalue="JUnit.SmartUITestRunnerTest.runTestScenario_multiplePagesAndExpectedElements_shouldProcessCorrectly" />
+        <item itemvalue="JUnit.SmartUITestRunnerTest.runTestScenario_expectedElementMismatch_shouldThrowAssertionError" />
+        <item itemvalue="JUnit.SmartUITestRunnerTest.runTestScenario_exceptionDuringExecution_shouldCallWebDriverQuit" />
+        <item itemvalue="JUnit.SmartUITestRunnerTest.runTestScenario_performAction_capturesAndExecutesScreenshotSupplier" />
       </list>
     </recent_temporary>
   </component>
@@ -226,24 +234,14 @@
           <option name="timeStamp" value="80" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/executor/SmartUITestRunner.java</url>
-          <line>59</line>
-          <option name="timeStamp" value="82" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/executor/SmartUITestRunner.java</url>
-          <line>89</line>
-          <option name="timeStamp" value="85" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/executor/SmartUITestRunner.java</url>
-          <line>76</line>
-          <option name="timeStamp" value="86" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/executor/SmartUITestRunner.java</url>
-          <line>82</line>
+          <url>file://$PROJECT_DIR$/src/test/java/com/ayago/smartuitest/executor/SmartUITestRunnerTest.java</url>
+          <line>234</line>
           <option name="timeStamp" value="89" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/ayago/smartuitest/executor/SmartUITestRunner.java</url>
+          <line>107</line>
+          <option name="timeStamp" value="90" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
